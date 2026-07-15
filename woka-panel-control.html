@@ -1,0 +1,1555 @@
+<meta charset="utf-8">
+<title>WokAI &amp; Horizonte Global | Panel de Control</title>
+<style>
+  :root{
+    /* WokAI Brand Kit v1 — navy dominante */
+    --f-sans:"Inter Tight","Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+    --f-mono:"JetBrains Mono",ui-monospace,"SF Mono",SFMono-Regular,Menlo,monospace;
+    --f-serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+    --spectral:linear-gradient(100deg,#3792FD 0%,#5BD3F0 34%,#6EE7B7 68%,#FFC857 100%);
+
+    --papel:#0A1438;            /* WokAI Night */
+    --carta:#0F1C4D;            /* navy elevado */
+    --tinta:#F2E9D6;            /* paper cálido como tinta */
+    --humo:rgba(242,233,214,0.62);
+    --apagado:rgba(242,233,214,0.45);
+    --grid:rgba(242,233,214,0.10);
+    --eje:rgba(242,233,214,0.28);
+    --borde:rgba(242,233,214,0.14);
+    --acento:#3792FD;           /* Azul Eléctrico — firma */
+    --acento-ink:#5BD3F0;       /* celeste para texto accionable sobre navy */
+    --acento-suave:rgba(55,146,253,0.14);
+    --acento-texto:#0A1438;     /* texto sobre botón azul */
+    --real:#3792FD;             /* serie real: azul eléctrico */
+    --obj:#6EE7B7;              /* línea objetivo/meta: verde prisma */
+    --bueno:#6EE7B7; --serio:#FFC857; --critico:#FF6464;
+    --bueno-bg:rgba(110,231,183,0.13); --serio-bg:rgba(255,200,87,0.13); --critico-bg:rgba(255,100,100,0.13);
+    --tip-bg:#F2E9D6; --tip-tinta:#0A1438;
+    --sombra:none;
+  }
+  @media (prefers-color-scheme: light){
+    :root{
+      /* inversión paper cálido (sección 05 del kit) */
+      --papel:#F2E9D6; --carta:#F8F1E1; --tinta:#0A1438;
+      --humo:rgba(10,20,56,0.68); --apagado:rgba(10,20,56,0.48);
+      --grid:rgba(10,20,56,0.10); --eje:rgba(10,20,56,0.26); --borde:rgba(10,20,56,0.15);
+      --acento:#3792FD; --acento-ink:#1D64C8; --acento-suave:rgba(55,146,253,0.12); --acento-texto:#F2E9D6;
+      --real:#2A7BE4; --obj:#0FA36B;
+      --bueno:#0E8F5F; --serio:#A66E0A; --critico:#C43C3C;
+      --bueno-bg:rgba(14,143,95,0.12); --serio-bg:rgba(166,110,10,0.13); --critico-bg:rgba(196,60,60,0.12);
+      --tip-bg:#0A1438; --tip-tinta:#F2E9D6;
+      --sombra:0 1px 2px rgba(10,20,56,.06), 0 4px 14px rgba(10,20,56,.05);
+    }
+  }
+  :root[data-theme="dark"]{
+    --papel:#0A1438; --carta:#0F1C4D; --tinta:#F2E9D6;
+    --humo:rgba(242,233,214,0.62); --apagado:rgba(242,233,214,0.45);
+    --grid:rgba(242,233,214,0.10); --eje:rgba(242,233,214,0.28); --borde:rgba(242,233,214,0.14);
+    --acento:#3792FD; --acento-ink:#5BD3F0; --acento-suave:rgba(55,146,253,0.14); --acento-texto:#0A1438;
+    --real:#3792FD; --obj:#6EE7B7;
+    --bueno:#6EE7B7; --serio:#FFC857; --critico:#FF6464;
+    --bueno-bg:rgba(110,231,183,0.13); --serio-bg:rgba(255,200,87,0.13); --critico-bg:rgba(255,100,100,0.13);
+    --tip-bg:#F2E9D6; --tip-tinta:#0A1438;
+    --sombra:none;
+  }
+  :root[data-theme="light"]{
+    --papel:#F2E9D6; --carta:#F8F1E1; --tinta:#0A1438;
+    --humo:rgba(10,20,56,0.68); --apagado:rgba(10,20,56,0.48);
+    --grid:rgba(10,20,56,0.10); --eje:rgba(10,20,56,0.26); --borde:rgba(10,20,56,0.15);
+    --acento:#3792FD; --acento-ink:#1D64C8; --acento-suave:rgba(55,146,253,0.12); --acento-texto:#F2E9D6;
+    --real:#2A7BE4; --obj:#0FA36B;
+    --bueno:#0E8F5F; --serio:#A66E0A; --critico:#C43C3C;
+    --bueno-bg:rgba(14,143,95,0.12); --serio-bg:rgba(166,110,10,0.13); --critico-bg:rgba(196,60,60,0.12);
+    --tip-bg:#0A1438; --tip-tinta:#F2E9D6;
+    --sombra:0 1px 2px rgba(10,20,56,.06), 0 4px 14px rgba(10,20,56,.05);
+  }
+  *{box-sizing:border-box}
+  html{background:var(--papel)}
+  body{
+    margin:0; background:var(--papel); color:var(--tinta);
+    font:400 15px/1.55 var(--f-sans);
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1120px; margin:0 auto; padding:0 20px 72px}
+  .em{font-family:var(--f-serif); font-style:italic; font-weight:400}
+
+  /* ---------- prisma (firma) ---------- */
+  .prisma{height:3px; background:var(--spectral)}
+
+  /* ---------- header ---------- */
+  header{border-bottom:1px solid var(--borde); background:var(--papel)}
+  .head-in{max-width:1120px; margin:0 auto; padding:26px 20px 20px; display:flex; flex-wrap:wrap; gap:16px; align-items:flex-end; justify-content:space-between}
+  .marca{display:flex; flex-direction:column; gap:4px}
+  .marca .logo{font-size:24px; font-weight:900; letter-spacing:-0.04em; line-height:1}
+  .marca .logo .ai{
+    background:var(--spectral); background-size:220% 100%;
+    -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent; color:transparent;
+  }
+  .marca .logo .colab{font-weight:300; letter-spacing:-0.02em; color:var(--tinta)}
+  .marca .logo .divisor{font-weight:300; color:var(--humo); font-size:0.8em}
+  .marca .bajada{font-size:12.5px; color:var(--humo); font-weight:300}
+  .tc-box{display:flex; align-items:center; gap:10px; background:var(--carta); border:1px solid var(--borde); border-radius:12px; padding:8px 12px; box-shadow:var(--sombra)}
+  .tc-box label{font-family:var(--f-mono); font-size:9.5px; text-transform:uppercase; letter-spacing:0.16em; color:var(--apagado); font-weight:400}
+  .tc-box input{width:92px}
+
+  /* ---------- tabs ---------- */
+  nav{position:sticky; top:0; z-index:30; background:var(--papel); border-bottom:1px solid var(--borde)}
+  .tabs{max-width:1120px; margin:0 auto; padding:0 20px; display:flex; gap:2px; overflow-x:auto}
+  .tab{
+    appearance:none; background:none; border:none; border-bottom:2px solid transparent;
+    padding:14px 13px 12px; cursor:pointer; white-space:nowrap;
+    font-family:var(--f-mono); font-size:10.5px; font-weight:400;
+    letter-spacing:0.14em; text-transform:uppercase; color:var(--humo);
+  }
+  .tab:hover{color:var(--tinta)}
+  .tab[aria-selected="true"]{color:var(--acento-ink); border-bottom-color:var(--acento)}
+  .panel{display:none; padding-top:28px}
+  .panel.activo{display:block}
+
+  /* ---------- primitives ---------- */
+  .ceja{font-family:var(--f-mono); font-size:10px; text-transform:uppercase; letter-spacing:0.18em; font-weight:500; color:var(--humo); margin:0 0 6px}
+  h2{font-size:22px; font-weight:600; letter-spacing:-0.02em; margin:0 0 4px; text-wrap:balance}
+  .nota{color:var(--humo); font-size:13.5px; font-weight:300; margin:0; max-width:68ch}
+  .nota b{font-weight:500; color:var(--tinta)}
+  .carta{background:var(--carta); border:1px solid var(--borde); border-radius:16px; padding:20px; box-shadow:var(--sombra)}
+  .fila{display:grid; gap:16px; margin-top:20px}
+  @media(min-width:860px){ .fila.c2{grid-template-columns:1fr 1fr} .fila.c3{grid-template-columns:1fr 1fr 1fr} .fila.c4{grid-template-columns:repeat(4,1fr)} .fila.c21{grid-template-columns:5fr 4fr} }
+  input, select{
+    font:400 14px/1.4 var(--f-sans); color:var(--tinta); background:var(--papel); border:1px solid var(--borde);
+    border-radius:8px; padding:8px 10px; width:100%;
+  }
+  select{appearance:auto}
+  input:focus-visible, select:focus-visible, button:focus-visible, .tab:focus-visible{outline:2px solid var(--acento); outline-offset:2px}
+  input[type=number]{font-family:var(--f-mono); font-size:13px; font-variant-numeric:tabular-nums}
+  input[type=date]{font-family:var(--f-mono); font-size:12px}
+  .campo{display:flex; flex-direction:column; gap:5px}
+  .campo>label{font-size:12.5px; font-weight:500; color:var(--humo)}
+  .campo .pista{font-size:12px; font-weight:300; color:var(--apagado)}
+  .campo .pista b{font-weight:500; color:var(--humo)}
+  .boton{appearance:none; font:500 13px/1.4 var(--f-sans); border-radius:10px; padding:9px 14px; cursor:pointer; border:1px solid var(--borde); background:transparent; color:var(--tinta)}
+  .boton:hover{border-color:var(--eje)}
+  .boton.primario{background:var(--acento); border-color:var(--acento); color:var(--acento-texto)}
+  .boton.primario:hover{filter:brightness(1.08)}
+  .chips{display:flex; flex-wrap:wrap; gap:8px}
+  .chip{appearance:none; font-family:var(--f-mono); font-size:10.5px; letter-spacing:0.06em; font-weight:400; border:1px solid var(--borde); background:transparent; color:var(--humo); border-radius:999px; padding:6px 12px; cursor:pointer}
+  .chip[aria-pressed="true"]{background:var(--acento-suave); border-color:var(--acento); color:var(--acento-ink)}
+
+  /* hero figure */
+  .hero-num{font-family:var(--f-sans); font-size:clamp(32px,5vw,48px); font-weight:300; letter-spacing:-0.03em; line-height:1.05; color:var(--tinta); font-variant-numeric:tabular-nums}
+  .hero-sub{font-size:13.5px; font-weight:300; color:var(--humo); margin-top:6px}
+  .kpi .valor{font-family:var(--f-mono); font-size:21px; font-weight:400; letter-spacing:-0.01em; line-height:1.2; font-variant-numeric:tabular-nums}
+  .kpi .detalle{font-size:12px; font-weight:300; color:var(--humo); margin-top:4px}
+  .kpi{padding:16px 18px}
+
+  .pill{display:inline-flex; align-items:center; gap:5px; font-family:var(--f-mono); font-size:11px; font-weight:500; border-radius:999px; padding:2px 10px; font-variant-numeric:tabular-nums}
+  .pill.bueno{color:var(--bueno); background:var(--bueno-bg)}
+  .pill.serio{color:var(--serio); background:var(--serio-bg)}
+  .pill.critico{color:var(--critico); background:var(--critico-bg)}
+
+  /* tables */
+  .tabla-envoltura{overflow-x:auto; margin-top:12px}
+  table{border-collapse:collapse; width:100%; font-size:13.5px}
+  th{font-family:var(--f-mono); font-size:9.5px; text-transform:uppercase; letter-spacing:0.14em; color:var(--apagado); font-weight:400; text-align:left; padding:8px 10px; border-bottom:1px solid var(--eje); white-space:nowrap}
+  td{padding:8px 10px; border-bottom:1px solid var(--grid); vertical-align:middle; font-weight:300}
+  td.num, th.num{text-align:right}
+  td.num{font-family:var(--f-mono); font-size:12.5px; font-variant-numeric:tabular-nums}
+  tr.total td{font-weight:500; border-top:2px solid var(--eje)}
+  td .sub{display:block; font-size:11.5px; color:var(--apagado); font-family:var(--f-sans); font-weight:300}
+  .tabla-envoltura input{padding:5px 8px; border-radius:6px; max-width:130px; text-align:right}
+  .tabla-envoltura select{padding:5px 8px; border-radius:6px; font-size:12.5px; width:auto}
+
+  /* charts */
+  .viz{margin-top:8px}
+  .viz svg{display:block; width:100%; height:auto}
+  .viz text{font-family:var(--f-mono)}
+  .leyenda{display:flex; flex-wrap:wrap; gap:14px; font-family:var(--f-mono); font-size:10.5px; letter-spacing:0.04em; color:var(--humo); margin:6px 0 2px}
+  .leyenda span{display:inline-flex; align-items:center; gap:6px}
+  .muestra{width:14px; height:4px; border-radius:2px; display:inline-block}
+  .muestra.linea{height:0; border-top:2px dashed var(--obj); border-radius:0}
+  #tooltip{
+    position:fixed; z-index:99; pointer-events:none; display:none;
+    background:var(--tip-bg); color:var(--tip-tinta); font-size:12.5px; line-height:1.45;
+    border-radius:8px; padding:7px 10px; max-width:260px; box-shadow:0 4px 18px rgba(0,0,0,.35);
+  }
+  #tooltip b{font-weight:600}
+  .barra{cursor:pointer}
+  .barra:hover{filter:brightness(1.15)}
+  details.ver-tabla{margin-top:10px}
+  details.ver-tabla summary{cursor:pointer; font-family:var(--f-mono); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--acento-ink)}
+
+  .aviso{font-size:12.5px; font-weight:300; color:var(--apagado); margin-top:10px; line-height:1.55}
+  .aviso b{font-weight:500; color:var(--humo)}
+  .sep{border:none; border-top:1px solid var(--grid); margin:18px 0}
+  .accion-tabla{background:none; border:none; color:var(--critico); font-family:var(--f-mono); font-size:10.5px; letter-spacing:0.06em; cursor:pointer; padding:2px 4px}
+  .etiqueta-nuevo{font-family:var(--f-mono); font-size:9px; letter-spacing:0.12em; text-transform:uppercase; color:var(--acento-ink); background:var(--acento-suave); border-radius:5px; padding:1px 6px; margin-left:6px}
+  .lista-acciones{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px}
+  .chip-marca{display:inline-block; font-family:var(--f-mono); font-size:9.5px; letter-spacing:0.08em; border-radius:5px; padding:2px 7px; white-space:nowrap}
+  .chip-marca.horizonte{color:var(--acento-ink); background:var(--acento-suave)}
+  .chip-marca.wokai{color:var(--serio); background:var(--serio-bg)}
+  tr.grupo-etapa td{font-family:var(--f-mono); font-size:9.5px; text-transform:uppercase; letter-spacing:0.16em; font-weight:400; color:var(--acento-ink); background:var(--acento-suave); padding:6px 10px}
+  .vencido{color:var(--critico); font-weight:600}
+  .grilla-form{display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); align-items:end}
+  @media (prefers-reduced-motion: no-preference){
+    .panel.activo{animation:aparecer .18s ease-out}
+    @keyframes aparecer{from{opacity:0; transform:translateY(4px)} to{opacity:1; transform:none}}
+  }
+</style>
+
+<div class="prisma"></div>
+<header>
+  <div class="head-in">
+    <div class="marca">
+      <div class="logo">Wok<span class="ai">AI</span> <span class="colab">&amp; Horizonte Global</span> <span class="divisor">| Panel de Control</span></div>
+      <div class="bajada">Tarifas, horas y <span class="em">contribución</span> — control de gestión desde jul-2026, con horas de Toggl</div>
+    </div>
+    <div class="tc-box" style="flex-direction:column; align-items:flex-start; gap:4px">
+      <div style="display:flex; align-items:center; gap:10px">
+        <label for="tc">TC BNA promedio</label>
+        <input type="number" id="tc" min="1" step="5">
+      </div>
+      <span id="tc-fuente" style="font-size:11.5px; color:var(--apagado)"></span>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" data-panel="p-calc">Calculador de Tarifa</button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="p-comp">Objetivos vs Realidad</button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="p-proy">Proyectos</button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="p-crm">CRM</button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="p-cfo">Costos &amp; CMG</button>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- ============ TAB 1: CALCULADORA ============ -->
+  <section class="panel activo" id="p-calc" role="tabpanel">
+    <p class="ceja">Paso 1 · Definí el objetivo</p>
+    <h2>Tu objetivo: horas vendidas × tarifa</h2>
+    <p class="nota">El objetivo se arma con volumen y precio: cuántas horas por día lográs vender y a qué tarifa mínima. El ingreso mensual es la consecuencia.</p>
+
+    <div class="fila c21">
+      <div class="carta">
+        <div class="grilla-form" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
+          <div class="campo">
+            <label for="horasDia">Horas vendidas por día</label>
+            <input type="number" id="horasDia" min="0.5" max="12" step="0.5">
+          </div>
+          <div class="campo">
+            <label for="diasMes">Días facturables por mes</label>
+            <input type="number" id="diasMes" min="1" max="26" step="1">
+          </div>
+          <div class="campo">
+            <label for="tarifaObj">Tarifa mínima (USD/h)</label>
+            <input type="number" id="tarifaObj" min="50" step="5">
+            <span class="pista">Mínimo: US$ 50/h</span>
+          </div>
+        </div>
+        <p class="pista" style="margin-top:10px" id="horas-derivadas"></p>
+        <div style="margin-top:14px">
+          <p class="ceja" style="margin-bottom:8px">Escenarios de carga</p>
+          <div class="chips" id="presets">
+            <button class="chip" data-hd="2">Arranque · 2 h/día</button>
+            <button class="chip" data-hd="4">Media carga · 4 h/día</button>
+            <button class="chip" data-hd="6">Objetivo · 6 h/día</button>
+            <button class="chip" data-hd="8">Tope · 8 h/día</button>
+          </div>
+        </div>
+        <hr class="sep">
+        <p class="ceja" style="margin-bottom:8px">Meta del trimestre en curso</p>
+        <div class="grilla-form" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
+          <div class="campo">
+            <label for="metaHoras">Horas vendidas /mes</label>
+            <input type="number" id="metaHoras" min="1" step="5">
+          </div>
+          <div class="campo">
+            <label for="metaTarifa">Tarifa (USD/h)</label>
+            <input type="number" id="metaTarifa" min="1" step="5">
+          </div>
+          <div class="campo">
+            <label>Ingreso de la meta</label>
+            <div id="meta-ingreso" style="font-weight:700; padding:8px 0; font-variant-numeric:tabular-nums"></div>
+          </div>
+        </div>
+        <p class="pista">Los gráficos y avisos comparan contra esta meta (el escalón alcanzable de este trimestre); el objetivo final de arriba es el norte.</p>
+        <hr class="sep">
+        <div class="fila c3" style="margin-top:0">
+          <div>
+            <p class="ceja">Costos fijos/mes</p>
+            <div class="kpi-mini" id="calc-costos" style="font-weight:700; font-variant-numeric:tabular-nums"></div>
+          </div>
+          <div>
+            <p class="ceja">Tarifa p/ netear objetivo</p>
+            <div id="calc-fact" style="font-weight:700; font-variant-numeric:tabular-nums"></div>
+          </div>
+          <div>
+            <p class="ceja">Tarifa real hoy</p>
+            <div id="calc-real" style="font-weight:700; font-variant-numeric:tabular-nums"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="carta" style="display:flex; flex-direction:column; justify-content:center">
+        <p class="ceja">Ingreso objetivo mensual</p>
+        <div class="hero-num" id="hero-ingreso"></div>
+        <div class="hero-sub" id="hero-ingreso-sub"></div>
+        <hr class="sep">
+        <div id="hero-brecha" style="font-size:14px"></div>
+      </div>
+    </div>
+
+    <div class="carta" style="margin-top:16px">
+      <p class="ceja">Sensibilidad · volumen de horas vendidas</p>
+      <p class="nota">Qué ingreso lográs a tu tarifa mínima según las horas que vendas — y qué tarifa necesitarías para sostener el mismo ingreso objetivo si vendés menos.</p>
+      <div class="tabla-envoltura">
+        <table id="tabla-sensibilidad"></table>
+      </div>
+      <p class="aviso">Lectura del CFO: el objetivo tiene dos palancas. Si el volumen no llega, la tarifa tiene que compensar — y viceversa. La fila resaltada es tu escenario elegido.</p>
+    </div>
+  </section>
+
+  <!-- ============ TAB 2: OBJETIVO VS REAL ============ -->
+  <section class="panel" id="p-comp" role="tabpanel">
+    <p class="ceja">Paso 2 · Confrontá con la realidad</p>
+    <h2>Objetivo vs. real, mes a mes</h2>
+    <p class="nota">Los datos reales salen de los registros de facturación cargados en «Proyectos» y de las horas de Toggl. Las líneas de meta se calculan con los parámetros del Calculador.</p>
+
+    <div class="carta" style="margin-top:16px">
+      <p class="ceja">Avisos del mes · ¿vender o entregar?</p>
+      <div id="avisos"></div>
+    </div>
+
+    <div class="fila c4" id="kpis"></div>
+
+    <div class="carta" style="margin-top:16px">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px">
+        <div>
+          <p class="ceja">Horas vendidas por hora facturada</p>
+          <h2 style="font-size:16.5px">Horas reales por mes vs. objetivo</h2>
+        </div>
+      </div>
+      <div class="leyenda"><span><i class="muestra" style="background:var(--real)"></i>Horas reales</span><span><i class="muestra linea"></i>Objetivo (calculadora)</span></div>
+      <div class="viz" id="chart-horas"></div>
+      <details class="ver-tabla"><summary>Ver como tabla</summary><div class="tabla-envoltura" id="tabla-horas"></div></details>
+    </div>
+
+    <div class="fila c2">
+      <div class="carta">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px; flex-wrap:wrap">
+          <div>
+            <p class="ceja">Precio</p>
+            <h2 style="font-size:16.5px">Tarifa promedio real vs. necesaria</h2>
+          </div>
+          <div class="chips" role="group" aria-label="Moneda">
+            <button class="chip moneda" data-m="USD" aria-pressed="true">USD</button>
+            <button class="chip moneda" data-m="ARS" aria-pressed="false">ARS</button>
+          </div>
+        </div>
+        <div class="leyenda"><span><i class="muestra" style="background:var(--real)"></i>Tarifa real promedio</span><span><i class="muestra linea"></i>Tarifa necesaria</span></div>
+        <div class="viz" id="chart-tarifa"></div>
+      </div>
+      <div class="carta">
+        <p class="ceja">Volumen total (horas + precio fijo)</p>
+        <h2 style="font-size:16.5px">Facturación mensual vs. necesaria</h2>
+        <div class="leyenda"><span><i class="muestra" style="background:var(--real)"></i>Facturación real</span><span><i class="muestra linea"></i>Necesaria (objetivo + costos)</span></div>
+        <div class="viz" id="chart-fact"></div>
+      </div>
+    </div>
+
+    <div class="carta" style="margin-top:16px">
+      <p class="ceja">Detalle mensual</p>
+      <div class="tabla-envoltura" id="tabla-mensual"></div>
+      <p class="aviso">La conversión a USD usa el tipo de cambio registrado en cada bloque del Excel (dic-23 en adelante) y valores de referencia aproximados para jun–nov 2023. «Tarifa promedio» pondera solo los proyectos facturados por hora.</p>
+    </div>
+  </section>
+
+  <!-- ============ TAB 3: PROYECTOS ============ -->
+  <section class="panel" id="p-proy" role="tabpanel">
+    <p class="ceja">Paso 3 · La cartera</p>
+    <h2>Proyectos</h2>
+    <p class="nota">La cartera en ejecución con sus condiciones (honorarios, horas estimadas, plazos, estado de cobro) se gestiona acá; las horas reales llegan solas desde Toggl (19 h). Control de gestión iniciado el <b>10/07/2026</b>.</p>
+
+    <div class="carta" style="margin-top:16px">
+      <p class="ceja">Dashboard</p>
+      <h2 style="font-size:16.5px">Estado de la cartera de un vistazo</h2>
+      <p class="ceja" style="margin-top:14px">Datos operativos</p>
+      <div class="fila c4" id="dash-operativo" style="margin-top:6px"></div>
+      <p class="ceja" style="margin-top:16px">Datos comerciales</p>
+      <div class="fila c3" id="dash-comercial" style="margin-top:6px"></div>
+      <p class="ceja" style="margin-top:16px">Datos financieros</p>
+      <div class="fila c3" id="dash-financiero" style="margin-top:6px"></div>
+      <p class="aviso">Las horas salen de Toggl (sincronización diaria 19 h). La inversión en cortesías y en gestión comercial se valúa a tu tarifa mínima (US$ <span id="dash-tarifa-ref"></span>/h).</p>
+    </div>
+
+    <div class="carta" style="margin-top:16px">
+      <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px">
+        <div>
+          <p class="ceja">Detalle por Proyecto</p>
+          <h2 style="font-size:16.5px">La matriz de la cartera en ejecución</h2>
+        </div>
+        <button class="boton" id="btn-nuevo-ejec">+ Nuevo proyecto</button>
+      </div>
+      <p class="nota">Editá cada campo directamente en la tabla. Las <b>horas Toggl</b> y la <b>tarifa efectiva</b> se calculan solas si el proyecto de Toggl se llama igual. <b>Por cobrar = facturado − cobrado</b>; el estado de cobro se deriva de los montos. Las oportunidades comerciales viven en la pestaña CRM.</p>
+      <div class="tabla-envoltura" id="tabla-pipeline"></div>
+      <p class="aviso">Total proyecto = propuesta (fee fijo), fee × meses de vigencia (mensual) o estimado total cargado a mano (T&amp;M). Cargá el <b>facturado</b> y el <b>cobrado acumulados</b>; las cortesías no cuentan en las cifras financieras.</p>
+    </div>
+
+    <div class="carta" style="margin-top:16px">
+      <div style="display:flex; justify-content:space-between; align-items:end; flex-wrap:wrap; gap:12px">
+        <div>
+          <p class="ceja">Planilla mensual</p>
+          <h2 style="font-size:16.5px">Facturación estimada y real, mes a mes</h2>
+        </div>
+        <div class="campo" style="min-width:110px"><label for="est-anio">Año</label><select id="est-anio"></select></div>
+      </div>
+      <p class="nota">Como tu planilla original: cada celda tiene el <b>estimado</b> (editable, en ARS) y debajo el <b>real</b> del mes, que se arma solo con los registros de facturación. Sumá cualquier proyecto u oportunidad del CRM como fila y completá los meses para <b>simular escenarios</b> de facturación. Los proyectos en <b>Cortesía</b> no aparecen (no facturan) — vuelven solos cuando les cambies el estado de cobro. Verde = real ≥ 95 % del plan.</p>
+      <div class="tabla-envoltura" id="tabla-estimados"></div>
+      <div class="grilla-form" style="margin-top:12px; grid-template-columns:2fr auto">
+        <div class="campo"><label for="est-proy">Sumar proyecto u oportunidad a la planilla</label><input list="lista-proyectos-est" id="est-proy" placeholder="Elegí de la lista o escribí un nombre nuevo"><datalist id="lista-proyectos-est"></datalist></div>
+        <button class="boton primario" id="btn-estimar" style="align-self:end">Agregar fila</button>
+      </div>
+    </div>
+
+    <div class="carta" style="margin-top:16px">
+      <p class="ceja">Cargar un registro nuevo</p>
+      <div class="grilla-form" id="form-registro">
+        <div class="campo"><label for="f-mes">Mes</label><input type="month" id="f-mes"></div>
+        <div class="campo"><label for="f-cliente">Cliente</label><input list="lista-clientes" id="f-cliente" placeholder="Cliente"><datalist id="lista-clientes"></datalist></div>
+        <div class="campo"><label for="f-proyecto">Proyecto</label><input id="f-proyecto" placeholder="Proyecto"></div>
+        <div class="campo"><label for="f-horas">Horas vendidas</label><input type="number" id="f-horas" min="0" step="0.5" placeholder="0"></div>
+        <div class="campo"><label for="f-tarifa">Tarifa ARS/h</label><input type="number" id="f-tarifa" min="0" step="500" placeholder="0"></div>
+        <div class="campo"><label for="f-monto">Monto ARS</label><input type="number" id="f-monto" min="0" step="1000" placeholder="auto = horas × tarifa"></div>
+        <div class="campo"><label for="f-insumidas">Horas insumidas</label><input type="number" id="f-insumidas" min="0" step="0.5" placeholder="trabajadas reales"></div>
+        <button class="boton primario" id="btn-agregar">Agregar</button>
+      </div>
+      <p class="aviso" id="msg-registro"></p>
+    </div>
+
+    <div class="carta" style="margin-top:16px">
+      <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:end; justify-content:space-between">
+        <div style="display:flex; gap:12px; flex-wrap:wrap">
+          <div class="campo" style="min-width:190px"><label for="filtro-cliente">Filtrar por cliente</label><select id="filtro-cliente"></select></div>
+          <div class="campo" style="min-width:150px"><label for="filtro-mes">Filtrar por mes</label><select id="filtro-mes"></select></div>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap">
+          <button class="boton" id="btn-csv">Exportar CSV</button>
+          <button class="boton" id="btn-respaldo">Descargar respaldo</button>
+          <label class="boton" style="cursor:pointer">Restaurar respaldo<input type="file" id="input-respaldo" accept=".json" style="display:none"></label>
+        </div>
+      </div>
+      <div class="tabla-envoltura" id="tabla-registros"></div>
+      <p class="aviso" id="aviso-respaldo"></p>
+    </div>
+
+    <div class="carta" style="margin-top:16px">
+      <p class="ceja">Tarifas por proyecto · venta vs. efectiva</p>
+      <p class="nota">Dos tarifas por proyecto: la de <b>venta</b> (facturado ÷ horas vendidas) y la <b>efectiva</b> (facturado ÷ horas insumidas — las que trabajaste de verdad). Las horas insumidas suman lo medido en <b>Toggl</b> (sincronización diaria 19 h) más lo cargado en registros; si escribís un valor en la columna editable, ese total manual pisa a los automáticos.</p>
+      <div class="tabla-envoltura" id="tabla-proyectos"></div>
+      <p class="aviso">Convención para que Toggl matchee solo: nombrá cada proyecto de Toggl «Cliente · Proyecto», igual que en el panel. Sin horas insumidas no hay tarifa efectiva: un precio fijo puede facturar bien y aun así pagarte menos que el mínimo por hora trabajada.</p>
+    </div>
+  </section>
+
+  <!-- ============ TAB 4: CRM ============ -->
+  <section class="panel" id="p-crm" role="tabpanel">
+    <p class="ceja">Pipeline comercial</p>
+    <h2>CRM — oportunidades antes del cierre</h2>
+    <p class="nota">Leads, propuestas enviadas y proyectos pausados. Todo se edita acá: fee esperado, probabilidad, próximo paso y fecha límite. El pipeline ponderado (fee × probabilidad) es lo que alimenta los avisos de venta.</p>
+    <div id="crm-resumen" class="fila c4" style="margin-top:16px"></div>
+    <div class="carta" style="margin-top:16px">
+      <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px">
+        <p class="ceja">Oportunidades por etapa</p>
+        <button class="boton" id="btn-nuevo-crm">+ Nueva oportunidad</button>
+      </div>
+      <div class="tabla-envoltura" id="tabla-crm"></div>
+      <p class="aviso">Regla de probabilidad sugerida: Lead 10 % · Propuesta enviada 40 % · Discovery 70 %. Cuando una oportunidad se gana, cambiá su etapa a Discovery o Delivery y pasa sola a la pestaña Proyectos.</p>
+    </div>
+
+    <div class="carta" style="margin-top:16px">
+      <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px">
+        <div>
+          <p class="ceja">Padrón de clientes</p>
+          <h2 style="font-size:16.5px">Clientes</h2>
+        </div>
+        <button class="boton" id="btn-nuevo-cliente">+ Nuevo cliente</button>
+      </div>
+      <p class="nota">Los clientes de Toggl se importan solos cada día. Renombrar acá actualiza todos los proyectos del cliente; solo se puede quitar un cliente sin proyectos asignados (si existe en Toggl, reaparece — borralo también allá).</p>
+      <div class="tabla-envoltura" id="tabla-clientes"></div>
+    </div>
+  </section>
+
+  <!-- ============ TAB 5: COSTOS & CMG ============ -->
+  <section class="panel" id="p-cfo" role="tabpanel">
+    <p class="ceja">Paso 4 · Control del CFO</p>
+    <h2>Costos fijos y contribución marginal</h2>
+    <p class="nota">Cargá tus costos fijos mensuales y los costos directos de cada proyecto. La contribución marginal te dice qué proyectos pagan la estructura y cuáles no.</p>
+
+    <div class="fila c21">
+      <div class="carta">
+        <p class="ceja">Costos fijos mensuales (ARS)</p>
+        <div class="tabla-envoltura" id="tabla-costos"></div>
+        <div class="lista-acciones">
+          <button class="boton" id="btn-costo">+ Agregar costo fijo</button>
+        </div>
+      </div>
+      <div class="carta">
+        <p class="ceja">Punto de equilibrio</p>
+        <div id="equilibrio"></div>
+      </div>
+    </div>
+
+    <div class="carta" style="margin-top:16px">
+      <p class="ceja">Contribución marginal por proyecto (acumulado del período)</p>
+      <p class="nota">Editá el costo directo de cada proyecto (viáticos, colaboradores, licencias específicas). Contribución = facturado − costo directo. Semáforo: ≥ 70 % sana · 40–70 % a revisar · &lt; 40 % crítica.</p>
+      <div class="tabla-envoltura" id="tabla-contribucion"></div>
+    </div>
+
+    <div class="carta" style="margin-top:16px">
+      <p class="ceja">Cómo escala este panel</p>
+      <p class="nota" style="max-width:none">
+        1) <b>Hoy</b>: registrá horas de <i>todos</i> los proyectos (también los de precio fijo) para conocer tu tarifa efectiva real.
+        2) <b>Al facturar</b>: cargá cada mes en «Proyectos y registros» — reemplaza al Excel.
+        3) <b>Con equipo</b>: el mismo registro suma una columna «quién» y un costo hora interno por persona; la contribución marginal pasa a descontar el costo de las horas del equipo, y este panel se convierte en tu control de rentabilidad por persona y por proyecto.
+      </p>
+    </div>
+  </section>
+</div>
+
+<div id="tooltip" role="status"></div>
+
+<script>
+/* ================= datos del Excel ================= */
+const REGISTROS_BASE = [["2023-06","DIVERIA","UCyD",7371.6,21,154803.6],["2023-06","DIVERIA","RAES",7371.6,2,14743.2],["2023-06","Estudios LL&A","Gestión de Proyectos",5170.58,13.3,68768.77],["2023-06","AxionLog","Auditoria COL - 2023",0,0,148500],["2023-06","CBSé","Adelanto 40%",0,0,665500],["2023-07","DIVERIA","UCyD",7371.6,14,103202.4],["2023-07","DIVERIA","RAES",7371.6,8.5,62658.6],["2023-07","Estudios LL&A","Gestión de Proyectos",6500,14.41,93665],["2023-07","AxionLog","Auditoria COL - 2023",0,0,99000],["2023-08","DIVERIA","UCyD",7371.6,21.5,158489.4],["2023-08","Estudios LL&A","Gestión de Proyectos",6500,13,84500],["2023-08","AxionLog","Auditoria COL - 2023",0,0,99000],["2023-09","DIVERIA","UCyD",9436,15.5,146258],["2023-09","DIVERIA","RAES",9436,4.5,42462],["2023-09","Estudios LL&A","Gestión de Proyectos",7800,11.54,90012],["2023-09","AxionLog","Audit PE - Adel 50%",0,0,340000],["2023-09","CBSé","Adelanto 20%",0,0,799250],["2023-09","CBSé","Gastos de Viajes",0,0,85749.49],["2023-09","Clínica Parque","Diagnóstico Inicial - Adelanto 50%",0,0,222112],["2023-10","DIVERIA","UCyD",9436,18.3,172678.8],["2023-10","DIVERIA","RAES",9436,8,75488],["2023-10","Estudios LL&A","Gestión de Proyectos",7800,12.42,96876],["2023-10","AxionLog","Audit MX - Saldo 50%",0,0,340000],["2023-10","AxionLog","Gastos de Viaje",0,0,20762.9],["2023-10","CBSé","Saldo 40%",0,0,1790950],["2023-10","Clínica Parque","Diagnóstico Inicial - Saldo Final",0,0,222112],["2023-10","CABA - Of. Integridad Pública","Septiembre 2023 y Octubre 2023",0,0,596000],["2023-11","DIVERIA","RAES",9436,9.5,89642],["2023-11","DIVERIA","UCyD",9436,8,75488],["2023-11","Estudios LL&A","Gestión de Proyectos",8800,10.27,90376],["2023-11","AxionLog","Audit MX - Saldo 50%",0,0,442500],["2023-11","CBSé","Saldo 40%",0,0,1790950],["2023-11","CABA - Of. Integridad Pública","Septiembre 2023 y Octubre 2023",0,0,496800],["2023-11","TotalEnergies","Proyecto Auditoría Interna",0,0,771205],["2023-12","DIVERIA","RAES",12927,9,116343],["2023-12","DIVERIA","UCyD",12927,14,180978],["2023-12","Estudios LL&A","Gestión de Proyectos",8800,19.3,169840],["2023-12","AxionLog","Audit MX - Saldo 50%",0,0,442500],["2023-12","AxionLog","Gastos de Viaje",0,0,23504.76],["2023-12","Clínica Parque","Diagnóstico Inicial - Saldo Final",0,0,185426],["2023-12","CABA - Of. Integridad Pública","Septiembre 2023 y Octubre 2023",0,0,1006020],["2023-12","TotalEnergies","Proyecto Auditoría Interna",0,0,1730200],["2024-01","DIVERIA","RAES",12927,5.5,71098.5],["2024-01","DIVERIA","UCyD",12927,8,103416],["2024-01","Estudios LL&A","Gestión de Proyectos",11440,10.19,116573.6],["2024-01","TotalEnergies","Proyecto Auditoría Interna",0,0,1730200],["2024-02","DIVERIA","RAES",12927,1,12927],["2024-02","DIVERIA","UCyD",12927,5,64635],["2024-02","DIVERIA","BQB",12927,1,12927],["2024-02","Estudios LL&A","Gestión de Proyectos",11440,4.33,49535.2],["2024-02","Clínica Parque","Auditoría Integral",0,0,916500],["2024-02","CABA - Of. Integridad Pública","Enero 2024",0,0,380000],["2024-03","DIVERIA","RAES",20683.2,4.5,93074.4],["2024-03","DIVERIA","UCyD",20683.2,3,62049.6],["2024-03","DIVERIA","BQB",20683.2,6.5,134440.8],["2024-03","Estudios LL&A","Gestión de Proyectos",16790,10.02,168235.8],["2024-03","AxionLog","Auditoria Integral Peru",0,0,739203.49],["2024-03","Universo Pinturería","Modelo de AI",0,0,972626],["2024-03","TotalEnergies","Proyecto Auditoría Interna",0,0,1799830],["2024-03","CBSé","Producción y Calidad",0,0,1417500],["2024-04","DIVERIA","RAES",20683.2,11,227515.2],["2024-04","DIVERIA","UCyD",20683.2,4,82732.8],["2024-04","DIVERIA","BQB",20683.2,3,62049.6],["2024-04","Estudios LL&A","Gestión de Proyectos",16790,10.47,175791.3],["2024-04","AxionLog","MEX | Abr 2024 - Auditoria Integral",0,0,800000],["2024-04","Universo Pinturería","Modelo de AI",0,0,648417],["2024-04","TotalEnergies","Proyecto Auditoría Interna",0,0,1799830],["2024-04","CBSé","Producción y Calidad",0,0,3307500],["2024-04","Clínica Parque","Auditoría Integral de Egresos e Ingresos",0,0,636353],["2024-05","DIVERIA","RAES",20683.2,10,206832],["2024-05","DIVERIA","UCyD",20683.2,3,62049.6],["2024-05","DIVERIA","BQB",20683,8,165464],["2024-05","Estudios LL&A","Gestión de Proyectos",16790,8.11,136166.9],["2024-05","AxionLog","MEX | Abr 2024 - Auditoria Integral",0,0,815273.45],["2024-05","AxionLog","COL & ECU | Mayo 2024 - Audit Int",0,0,857500],["2024-05","Universo Pinturería","Modelo de AI",0,0,648417],["2024-05","TotalEnergies","Proyecto Auditoría Interna",0,0,2057055],["2024-05","CBSé","Producción y Calidad",0,0,1459620],["2024-05","Clínica Parque","Auditoría Integral de Egresos e Ingresos",0,0,407080],["2024-06","DIVERIA","RAES",25853.75,7,180976.25],["2024-06","DIVERIA","UCyD",25853.75,4,103415],["2024-06","DIVERIA","BQB",25853.75,2,51707.5],["2024-06","AxionLog","COL & ECU | Mayo 2024 - Audit Int",0,0,857500],["2024-06","AxionLog","COL & ECU | Mayo 2024 - Audit Int",0,0,897500],["2024-06","Universo Pinturería","Modelo de AI",0,0,648417],["2024-06","TotalEnergies","Proyecto Auditoría Interna",0,0,2057055],["2024-06","CBSé","Producción y Calidad",0,0,497888],["2024-07","DIVERIA","RAES",25853.75,8,206830],["2024-07","DIVERIA","UCyD",25853.75,2,51707.5],["2024-07","AxionLog","COL & ECU | Mayo 2024 - Audit Int",0,0,897500],["2024-07","TotalEnergies","Proyecto Auditoría Interna",0,0,2057055],["2024-08","DIVERIA","RAES",25853.75,7,180976.25],["2024-08","DIVERIA","UCyD",25853.75,1,25853.75],["2024-08","DIVERIA","BQB",25853.75,2,51707.5],["2024-08","Universo Pinturería","Modelo de AI",0,0,841321.15],["2024-08","TotalEnergies","Proyecto Auditoría Interna",0,0,2152920],["2024-08","CBSé","Producción y Calidad",0,0,513810],["2024-09","DIVERIA","RAES",29731.81,6,178390.88],["2024-09","DIVERIA","UCyD",29731.81,2,59463.62],["2024-09","DIVERIA","BQB",29731.81,1,29731.81],["2024-09","TotalEnergies","Proyecto Auditoría Interna",0,0,2202585],["2024-09","CBSé","Producción y Calidad",0,0,513810],["2024-09","CBSé","Four Points",0,0,300352.5],["2024-10","DIVERIA","RAES",29731.81,6,178390.88],["2024-10","CBSé","Four Points",0,0,300352.5],["2024-11","DIVERIA","RAES",29731.81,8,237854.5],["2024-11","DIVERIA","UCyD",29731.81,2,59463.62],["2024-11","CBSé","Four Points",0,0,300352.5],["2024-12","DIVERIA","RAES",32110.36,6,192662.14],["2024-12","CBSé","Four Points",0,0,300352.5],["2025-01","DIVERIA","RAES",32110.36,7,224772.5],["2025-01","CBSé","Four Points",0,0,300352.5],["2025-02","DIVERIA","RAES",32110.36,8,256882.86],["2025-02","CBSé","Four Points",0,0,300352.5],["2025-04","DIVERIA","RAES",34518.63,9,310667.71],["2025-04","CBSé","Four Points",0,0,300352.5]];
+
+// TC por mes: dic-23 en adelante viene del propio Excel; jun–nov 23 son referencias aproximadas (blue)
+const TC_MES = {"2023-06":490,"2023-07":525,"2023-08":700,"2023-09":730,"2023-10":850,"2023-11":900,
+"2023-12":820,"2024-01":820,"2024-02":876.62,"2024-03":875,"2024-04":875,"2024-05":1040,"2024-06":1040,"2024-07":1040,"2024-08":1305,"2024-09":1305,"2024-10":1305,"2024-11":1305,"2024-12":1305,"2025-01":1305,"2025-02":1305,"2025-03":1305,"2025-04":1305};
+
+// Cotización BNA (promedio comprador/vendedor). Esta línea la actualiza la rutina diaria — no cambiar el formato.
+const TC_BNA = {"fecha":"2026-07-14","compra":1460,"venta":1510};
+// Horas insumidas medidas en Toggl Track por proyecto. Esta línea la actualiza la rutina diaria de las 19 h — no cambiar el formato.
+const HORAS_TOGGL = {"fecha":"2026-07-14","horas":{"Crosetto | Solución RH - Fase 0":8,"Adminstrations & Operations":5.3,"Sales & Account Management":2,"Prairie Imports | Automation Project":2,"Dra. Degregorio · Conciliador":1.5,"Rodar SRL · Asistente Comercial":1,"Sin proyecto":9.5}};
+// Catálogo de Toggl (clientes y proyecto→cliente). Esta línea también la actualiza la rutina diaria — no cambiar el formato.
+const TOGGL_CATALOGO = {"clientes":["AMCAP - Agencia de Viajes","Avancargo","Crosetto Ingeniería","Diveria","Hojman Propiedades","Medicina Estética Degregorio","Prairie Imports","Rodar SRL","Sweet","Universo","WokAI & Horizonte Global"],"proyectos":{"Adminstrations & Operations":"WokAI & Horizonte Global","Avancargo | Business Analist":"Diveria","Crosetto | Solución RH - Fase 0":"Crosetto Ingeniería","Dra. Degregorio · Conciliador":"Medicina Estética Degregorio","Prairie Imports | Automation Project":"Prairie Imports","Rodar SRL · Asistente Comercial":"Rodar SRL","Sales & Account Management":"WokAI & Horizonte Global","Universo Pinturería · Discovery":"Universo"}};
+const CLIENTE_INTERNO = 'WokAI & Horizonte Global';
+const clienteToggl = nombreProyecto => { // cliente de Toggl para un proyecto, por nombre normalizado
+  const nk = normalizarNombre(nombreProyecto);
+  for (const n in TOGGL_CATALOGO.proyectos){ if (normalizarNombre(n) === nk) return TOGGL_CATALOGO.proyectos[n]; }
+  return '';
+};
+const normalizarNombre = s => String(s).toLowerCase().replace(/[|—–-]/g,'·').replace(/[·\s]+/g,' ').trim();
+const togglDe = k => { // horas de Toggl para una clave "Cliente · Proyecto" del panel
+  const nk = normalizarNombre(k);
+  for (const n in HORAS_TOGGL.horas){ if (normalizarNombre(n) === nk) return HORAS_TOGGL.horas[n]; }
+  return 0;
+};
+TC_BNA.promedio = Math.round((TC_BNA.compra + TC_BNA.venta) / 2);
+
+// Inicio del control de gestión: los KPI y gráficos miden desde acá; lo anterior queda como histórico.
+const CONTROL_DESDE = '2026-07';
+const ETAPAS = ['Lead','Propuesta enviada','Discovery','Delivery','Pausado','Cerrado'];
+const ETAPAS_EJECUCION = ['Discovery','Delivery'];
+const ETAPAS_COMERCIAL = ['Lead','Propuesta enviada','Pausado'];
+const ESTADOS_COBRO = ['Sin facturar','Facturado','Cobro parcial','Cobrado','Cortesía'];
+const MARCAS = ['horizonte.global','WokAI'];
+const MODALIDADES = ['Fee por etapa','Fee mensual','T&M'];
+
+// Semilla inicial de la cartera (migrada del pipeline de Notion el 09/07/2026; después de la primera carga vive en este navegador).
+// [proyecto, marca, etapa, tipo, montoUSD, salud V/A/R, estado cobro, fecha límite, sponsor, notas]
+const SEED_NOTION = [
+["Crosetto | Solución RH - Fase 0","horizonte.global","Delivery","Implementación",2125,"V","Sin facturar","","Javier Gariotti / Juan Pablo Burella","Fase 0+1 aprobada (USD 2.125). RFP con Lucas; agenda de Fase 0 con H&CO."],
+["ProdTech — Account Manager Process","horizonte.global","Delivery","Implementación",45,"A","Sin facturar","2026-06-24","Pablo Ferrari","Pablo define fechas del 2.º semestre; Mariano se suma a la auditoría de México con Cristian."],
+["Medicina Estética Dra. Degregorio","WokAI","Discovery · Validar & Cerrar","Discovery",1000,"V","Sin facturar","2026-07-09","Dra. Antonella Degregorio","Validación funcional del agente conciliador con Fernanda; cerrar discovery y presentar propuesta con la demo."],
+["Universo Pinturería — Discovery","horizonte.global","Discovery · Analizar","Discovery",null,"V","Open Door","2026-07-09","Marcelo Basgall","Urgente: enviar propuesta económica (arquitectura + ROI) a Juan Raimondi. Presentación de resultados 23–24/07."],
+["AMCAP — Discovery","horizonte.global","Discovery · Analizar","Discovery",null,"V","Open Door","2026-07-02","Dirección AMCAP","Confirmar con Marcelo Fassi el estado de la propuesta (tiempos y valores); si no hay definición, forzar armado sincrónico."],
+["Rodar SRL — Asistente Comercial IA","WokAI","Discovery · Escuchar","Prototipo",null,"V",null,"2026-07-09","Germán (Rodar)","Cierre del relevamiento con Germán; consolidar encuesta final y arrancar desarrollo con Miguel."],
+["Prairie Imports | Automation Project","horizonte.global","Discovery · Escuchar","Discovery",null,"A",null,"2026-07-01","Arlen Penner","Enviar recap a Arlen y coordinar visita a Rosario (acompañamiento de 1 día con Nadia); definir marca final."],
+["Der Gummi — Discovery (integración Mantis)","horizonte.global","Discovery · Escuchar","Discovery",null,"V","Open Door","2026-07-10","Alejandro Erhardt","Responder a Mantis (cubierto vs. no cubierto); pasar contactos de Odoo a Ale y confirmar licenciamiento."],
+["Hojman Propiedades — Discovery","horizonte.global","Propuesta enviada","Discovery",null,"V",null,"2026-06-12","Saúl / Esther","Propuesta en revisión con reacción positiva de Saúl Hoffman; estructurar discovery sobre los 3 pilares de Aprofit."],
+["Abancargo / Techint — Discovery logística","horizonte.global","Lead","Advisory",null,"A",null,"2026-07-09","Marcelo Fassi / Lucas Martínez","Postura: declinar. Hablar con Marcelo Fassi, proponer perfil logístico alternativo y explorar colaboración futura."],
+["LAR (La Agrícola Regional) — Reactivación","horizonte.global","Lead",null,null,"A",null,"2026-07-10","Walter Korsich","Esperar respuesta de Walter a la propuesta de workshop; si no responde en la semana, hacer seguimiento."],
+["OCASA Life Sciences — Lead","horizonte.global","Lead",null,null,"V","Sin facturar","2026-07-01","Romina Pandiani","En espera del acuerdo de confidencialidad y datos por parte de Romina; no enviar nada hasta recibirlos."],
+["Mantis — Integración taller","WokAI","Lead","Implementación",null,"A","Sin facturar","2026-07-10","Ale + Betiana","No avanzar hasta que Mantis resuelva sus API; responder con requerimientos cubiertos vs. no cubiertos; se evalúa Odoo."],
+["Guido — Consultora IA (legacy)","horizonte.global","Lead","Advisory",null,"V",null,"2026-06-25",null,"Reunión de seguimiento; agendar reunión con CVC junto a Sol."],
+["Licitaciones Públicas — Oportunidad (con JD)","WokAI","Lead","Prototipo",null,"A",null,"2026-06-13",null,"Contactar Prospectia y Simpli para evaluar adaptación del automatizador de licitaciones."],
+["Sumiagro (Juan Himshoot) — Lead","horizonte.global","Lead","Discovery",null,"A",null,"2026-06-11",null,"Coordinar llamado inicial con Juan Himshoot."],
+["Sweet | Relevamiento Dulcilandia","horizonte.global","Pausado","Discovery",null,null,"Open Door",null,"Hernán Redondo","Pausado — coordinar reactivación."]
+];
+function semillaCartera(){
+  return SEED_NOTION.map((p,i) => ({
+    id: 'sem'+i,
+    nombre: p[0], marca: p[1],
+    etapa: p[2].startsWith('Discovery') ? 'Discovery' : p[2],
+    tipo: p[3] || '', fee: p[4] || 0, prob: null, hsEst: 0,
+    inicio: '', fin: p[7] || '',
+    cobro: p[6] === 'Open Door' ? 'Cortesía' : (p[6] || 'Sin facturar'),
+    cobrado: 0, salud: p[5] || '', notas: (p[9]||'').slice(0,180)
+  }));
+}
+
+/* ================= estado ================= */
+const CLAVE = 'woka-panel-v1';
+const porDefecto = {
+  horasDia: 6, diasMes: 20, tarifaObj: 50, tc: TC_BNA.promedio, moneda: 'USD',
+  metaHoras: 30, metaTarifa: 40, // meta del trimestre en curso (escalón hacia el objetivo)
+  proyectoComercial: 'Sales & Account Manamegment', // proyecto de Toggl con horas de venta (no facturables)
+  proyectos: null, // cartera: se siembra desde SEED_NOTION en la primera carga
+  ultimoRespaldo: null,
+  horasInsumidas: {}, // clave "cliente · proyecto" -> horas reales trabajadas
+  costosFijos: [
+    {n:'Monotributo / autónomos', m:0},
+    {n:'Contador', m:0},
+    {n:'Google Workspace', m:0},
+    {n:'Alojamiento web y dominios', m:0},
+    {n:'Suscripciones (IA, software)', m:0},
+    {n:'Internet y celular', m:0},
+  ],
+  costosDirectos: {}, // clave "cliente · proyecto" -> ARS
+  estimados: {}, // "YYYY-MM" -> { "cliente · proyecto": monto ARS estimado }
+  extras: [], // registros cargados por el usuario
+  baseEdits: {}, // ediciones sobre registros del Excel: índice -> {horas, insumidas, tarifa, monto}
+  baseDel: [] // índices de registros del Excel eliminados
+};
+let S;
+try { S = Object.assign({}, porDefecto, JSON.parse(localStorage.getItem(CLAVE) || '{}')); }
+catch(e){ S = Object.assign({}, porDefecto); }
+if (!Array.isArray(S.costosFijos)) S.costosFijos = porDefecto.costosFijos;
+if (!Array.isArray(S.extras)) S.extras = [];
+if (typeof S.costosDirectos !== 'object' || !S.costosDirectos) S.costosDirectos = {};
+// migración: el objetivo pasó a volumen × precio (h/día × días × USD/h)
+if (!S.tarifaObj){ S.horasDia = 6; S.diasMes = 20; S.tarifaObj = 50; }
+delete S.objetivo; delete S.objetivoUSD; delete S.horasMes;
+S.tarifaObj = Math.max(50, S.tarifaObj);
+if (typeof S.horasInsumidas !== 'object' || !S.horasInsumidas) S.horasInsumidas = {};
+if (typeof S.baseEdits !== 'object' || !S.baseEdits) S.baseEdits = {};
+if (!Array.isArray(S.baseDel)) S.baseDel = [];
+if (typeof S.estimados !== 'object' || !S.estimados) S.estimados = {};
+if (!Array.isArray(S.proyectos)) S.proyectos = semillaCartera();
+if (!S.metaHoras) S.metaHoras = 30;
+if (!S.metaTarifa) S.metaTarifa = 40;
+if (!S.proyectoComercial || S.proyectoComercial === 'Sales & Account Manamegment') S.proyectoComercial = 'Sales & Account Management';
+// campos nuevos de la cartera: cliente (de Toggl), modalidad de contratación y tarifa horaria para T&M
+S.proyectos.forEach(p=>{
+  if (p.cliente === undefined || p.cliente === '') p.cliente = clienteToggl(p.nombre) || '';
+  if (!p.modalidad) p.modalidad = 'Fee por etapa';
+  if (p.tarifaHora === undefined) p.tarifaHora = 0;
+  if (p.facturado === undefined) p.facturado = ['Facturado','Cobro parcial','Cobrado'].includes(p.cobro) ? Math.max(p.cobrado||0, p.cobro==='Cobrado' ? (p.fee||0) : 0) : 0;
+});
+// TC: el promedio BNA embebido gana, salvo que lo hayas editado a mano después de esa fecha
+const HOY = new Date().toISOString().slice(0,10);
+if (!S.tcManualFecha || S.tcManualFecha <= TC_BNA.fecha){ S.tc = TC_BNA.promedio; delete S.tcManualFecha; }
+const guardar = () => { try{ localStorage.setItem(CLAVE, JSON.stringify(S)); }catch(e){} };
+const horasObjetivo = () => S.horasDia * S.diasMes;
+const objetivoUSD = () => horasObjetivo() * S.tarifaObj;
+const objetivoARS = () => objetivoUSD() * S.tc;
+
+// filas fijadas a mano en la planilla mensual (para simular) y padrón de clientes (ABM)
+if (!Array.isArray(S.filasPlanilla)) S.filasPlanilla = [];
+if (!Array.isArray(S.clientes)) S.clientes = [];
+TOGGL_CATALOGO.clientes.forEach(c=>{ if (!S.clientes.includes(c)) S.clientes.push(c); });
+S.proyectos.forEach(p=>{ if (p.cliente && !S.clientes.includes(p.cliente)) S.clientes.push(p.cliente); });
+S.clientes.sort((a,b)=>a.localeCompare(b));
+
+// corrección puntual (10/07/2026, una sola vez): el proyecto vigente de Crosetto es "Crosetto | Solución RH - Fase 0"
+if (!S.migCrosetto){
+  const NOMBRE_CROSETTO = 'Crosetto | Solución RH - Fase 0';
+  const esViejo = n => /crosetto/i.test(n) && /discovery/i.test(n);
+  S.proyectos = S.proyectos.filter(p=>!esViejo(p.nombre));
+  if (!S.proyectos.some(p=>/crosetto/i.test(p.nombre))){
+    S.proyectos.unshift({id:'crosetto-f0', nombre:NOMBRE_CROSETTO, cliente:'Crosetto Ingeniería', marca:'horizonte.global',
+      etapa:'Delivery', tipo:'Implementación', modalidad:'Fee por etapa', fee:2125, tarifaHora:0, prob:null, hsEst:0,
+      inicio:'2026-06-30', fin:'', cobro:'Sin facturar', cobrado:0, salud:'V',
+      notas:'Fase 0+1 aprobada (USD 2.125). RFP con Lucas; agenda de Fase 0 con H&CO.'});
+  }
+  // renombrar claves del proyecto viejo en planilla, insumidas y costos directos
+  Object.keys(S.estimados).forEach(m=>{
+    Object.keys(S.estimados[m]).forEach(k=>{
+      if (esViejo(k)){ S.estimados[m][NOMBRE_CROSETTO] = (S.estimados[m][NOMBRE_CROSETTO]||0) + S.estimados[m][k]; delete S.estimados[m][k]; }
+    });
+  });
+  [S.horasInsumidas, S.costosDirectos].forEach(obj=>{
+    Object.keys(obj).forEach(k=>{ if (esViejo(k)){ obj[NOMBRE_CROSETTO] = obj[k]; delete obj[k]; } });
+  });
+  S.migCrosetto = true;
+  guardar();
+}
+// corrección puntual (10/07/2026, una sola vez): Prairie Imports toma el nombre de Toggl,
+// y se repara el "facturado" de los proyectos migrados antes de que existiera el campo
+if (!S.mig20260710b){
+  const NOMBRE_PRAIRIE = 'Prairie Imports | Automation Project';
+  const renombrar = (viejoRe, nuevo) => {
+    S.proyectos.forEach(p=>{ if (viejoRe.test(p.nombre)){ p.nombre = nuevo; p.cliente = clienteToggl(nuevo) || p.cliente; } });
+    Object.keys(S.estimados).forEach(m=>{
+      Object.keys(S.estimados[m]).forEach(k=>{
+        if (viejoRe.test(k)){ S.estimados[m][nuevo] = (S.estimados[m][nuevo]||0) + S.estimados[m][k]; delete S.estimados[m][k]; }
+      });
+    });
+    [S.horasInsumidas, S.costosDirectos].forEach(obj=>{
+      Object.keys(obj).forEach(k=>{ if (viejoRe.test(k)){ obj[nuevo] = obj[k]; delete obj[k]; } });
+    });
+    S.filasPlanilla = S.filasPlanilla.map(n=>viejoRe.test(n) ? nuevo : n);
+  };
+  if (!S.proyectos.some(p=>p.nombre === NOMBRE_PRAIRIE)) renombrar(/prairie/i, NOMBRE_PRAIRIE);
+  // facturado coherente con el estado de cobro que ya tenía cada proyecto
+  S.proyectos.forEach(p=>{
+    if (p.cobro === 'Facturado' && !(p.facturado > 0)) p.facturado = totalProyecto(p);
+    else if (p.cobro === 'Cobro parcial' && (p.facturado||0) <= (p.cobrado||0)) p.facturado = Math.max(totalProyecto(p), p.cobrado||0);
+    else if (p.cobro === 'Cobrado' && (p.facturado||0) < (p.cobrado||0)) p.facturado = p.cobrado||0;
+  });
+  S.mig20260710b = true;
+  guardar();
+}
+
+/* ================= utilidades ================= */
+const $ = s => document.querySelector(s);
+const fARS = new Intl.NumberFormat('es-AR',{maximumFractionDigits:0});
+const fUSD = new Intl.NumberFormat('es-AR',{maximumFractionDigits:0});
+const fUSD2 = new Intl.NumberFormat('es-AR',{maximumFractionDigits:1});
+const f1 = new Intl.NumberFormat('es-AR',{maximumFractionDigits:1});
+const ars = v => '$ ' + fARS.format(Math.round(v));
+const usd = v => 'US$ ' + (v < 100 ? fUSD2.format(v) : fUSD.format(Math.round(v)));
+const MESES_CORTOS = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const etiquetaMes = m => { const [a,mm] = m.split('-'); return MESES_CORTOS[+mm-1] + ' ' + a.slice(2); };
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const claveProy = r => r.cliente + ' · ' + r.proyecto;
+
+function registros(){
+  const base = REGISTROS_BASE.map((a,i) => {
+    const e = S.baseEdits[i] || {};
+    return {mes:a[0], cliente:a[1], proyecto:a[2],
+      tarifa: e.tarifa != null ? e.tarifa : a[3],
+      horas: e.horas != null ? e.horas : a[4],
+      monto: e.monto != null ? e.monto : a[5],
+      insumidas: e.insumidas != null ? e.insumidas : 0,
+      nuevo:false, editado: !!S.baseEdits[i], baseIdx:i};
+  }).filter(r => !S.baseDel.includes(r.baseIdx));
+  const extras = S.extras.map((a,i) => ({mes:a[0], cliente:a[1], proyecto:a[2], tarifa:a[3], horas:a[4], monto:a[5], insumidas:a[6]||0, nuevo:true, idx:i}));
+  return base.concat(extras);
+}
+function mesesContinuos(rs){
+  const set = [...new Set(rs.map(r=>r.mes))].sort();
+  if (!set.length) return [];
+  const out = []; let [a,m] = set[0].split('-').map(Number); const fin = set[set.length-1];
+  while (true){ const k = `${a}-${String(m).padStart(2,'0')}`; out.push(k); if (k === fin) break; m++; if (m===13){m=1;a++;} }
+  return out;
+}
+function agregadosMensuales(){
+  const rs = registros();
+  const meses = mesesContinuos(rs);
+  return meses.map(mes => {
+    const del = rs.filter(r => r.mes === mes);
+    const horas = del.reduce((s,r)=>s+(r.horas||0),0);
+    const montoHoras = del.reduce((s,r)=>s+((r.horas&&r.tarifa)? r.horas*r.tarifa : 0),0);
+    const total = del.reduce((s,r)=>s+(r.monto||0),0);
+    const tc = TC_MES[mes] || S.tc;
+    return {mes, horas, tarifa: horas>0 ? montoHoras/horas : null, total, tc, sinDatos: del.length===0};
+  });
+}
+const costosFijosTotal = () => S.costosFijos.reduce((s,c)=>s+(+c.m||0),0);
+function tarifaRealActual(){ // última tarifa promedio con datos
+  const ag = agregadosMensuales().filter(a=>a.tarifa);
+  return ag.length ? ag[ag.length-1] : null;
+}
+function horasPromedio6(){
+  const ag = agregadosMensuales().filter(a=>!a.sinDatos);
+  const u = ag.slice(-6);
+  return u.length ? u.reduce((s,a)=>s+a.horas,0)/u.length : 0;
+}
+
+/* ================= tooltip ================= */
+const tip = $('#tooltip');
+function mostrarTip(html, ev){ tip.innerHTML = html; tip.style.display='block'; moverTip(ev); }
+function moverTip(ev){
+  const m = 14, w = tip.offsetWidth, h = tip.offsetHeight;
+  let x = ev.clientX + m, y = ev.clientY - h - 10;
+  if (x + w > innerWidth - 8) x = ev.clientX - w - m;
+  if (y < 8) y = ev.clientY + m;
+  tip.style.left = x+'px'; tip.style.top = y+'px';
+}
+function ocultarTip(){ tip.style.display='none'; }
+
+/* ================= gráficos SVG ================= */
+function grafico(cont, datos, opts){
+  // datos: [{x, y, tip}] ; opts: {tipo:'barras'|'linea', objetivo: valor|null, fmt, alto}
+  const el = $(cont); if (!el) return;
+  const W = 920, H = opts.alto || 240, padL = 54, padR = 14, padT = 14, padB = 30;
+  const iw = W - padL - padR, ih = H - padT - padB;
+  const vals = datos.map(d=>d.y).filter(v=>v!=null);
+  let max = Math.max(1, ...vals, opts.objetivo || 0) * 1.12;
+  const xPos = i => padL + (datos.length>1 ? i * iw/(datos.length-1) : iw/2);
+  const bw = Math.max(6, Math.min(26, iw/datos.length - 4));
+  const xBar = i => padL + i * iw/datos.length + (iw/datos.length - bw)/2;
+  const yPos = v => padT + ih - (v/max)*ih;
+  const fmt = opts.fmt || (v=>f1.format(v));
+  // ticks: 3 líneas de grilla
+  let g = '';
+  for (let t=1;t<=3;t++){
+    const v = max*t/4 / 1.12 * 1.12; const yy = padT + ih - t/4*ih;
+    g += `<line x1="${padL}" y1="${yy}" x2="${W-padR}" y2="${yy}" stroke="var(--grid)" stroke-width="1"/>`;
+    g += `<text x="${padL-8}" y="${yy+4}" text-anchor="end" font-size="10.5" fill="var(--apagado)" style="font-variant-numeric:tabular-nums">${fmt(max*t/4)}</text>`;
+  }
+  // eje base
+  g += `<line x1="${padL}" y1="${padT+ih}" x2="${W-padR}" y2="${padT+ih}" stroke="var(--eje)" stroke-width="1"/>`;
+  // etiquetas x (cada n para no chocar)
+  const paso = Math.ceil(datos.length/11);
+  datos.forEach((d,i)=>{
+    if (i % paso === 0 || i === datos.length-1){
+      const cx = opts.tipo==='barras' ? xBar(i)+bw/2 : xPos(i);
+      g += `<text x="${cx}" y="${H-8}" text-anchor="middle" font-size="10.5" fill="var(--apagado)">${etiquetaMes(d.x)}</text>`;
+    }
+  });
+  let marcas = '';
+  if (opts.tipo === 'barras'){
+    datos.forEach((d,i)=>{
+      if (d.y == null) return;
+      const y = yPos(d.y), hh = Math.max(2, padT+ih-y);
+      marcas += `<rect class="barra" data-i="${i}" x="${xBar(i)}" y="${y}" width="${bw}" height="${hh}" rx="3.5" fill="var(--real)"/>`;
+    });
+  } else {
+    let path = '', puntos = '';
+    let empezado = false;
+    datos.forEach((d,i)=>{
+      if (d.y == null){ return; }
+      const x = xPos(i), y = yPos(d.y);
+      path += (empezado ? ' L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1); empezado = true;
+      puntos += `<circle class="barra" data-i="${i}" cx="${x}" cy="${y}" r="4" fill="var(--real)" stroke="var(--carta)" stroke-width="2"/>`;
+    });
+    marcas = `<path d="${path}" fill="none" stroke="var(--real)" stroke-width="2" stroke-linejoin="round"/>` + puntos;
+  }
+  let objetivo = '';
+  if (opts.objetivo != null && opts.objetivo <= max){
+    const yo = yPos(opts.objetivo);
+    objetivo = `<line x1="${padL}" y1="${yo}" x2="${W-padR}" y2="${yo}" stroke="var(--obj)" stroke-width="2" stroke-dasharray="6 5"/>
+      <text x="${W-padR}" y="${yo-6}" text-anchor="end" font-size="11" font-weight="700" fill="var(--obj)" style="font-variant-numeric:tabular-nums">objetivo ${fmt(opts.objetivo)}</text>`;
+  } else if (opts.objetivo != null){
+    objetivo = `<text x="${W-padR}" y="${padT+10}" text-anchor="end" font-size="11" font-weight="700" fill="var(--obj)">objetivo ${fmt(opts.objetivo)} ↑ fuera de escala</text>`;
+  }
+  // etiqueta directa del último valor
+  let ultima = '';
+  for (let i=datos.length-1;i>=0;i--){ if (datos[i].y!=null){
+    const cx = opts.tipo==='barras' ? xBar(i)+bw/2 : xPos(i);
+    ultima = `<text x="${cx}" y="${yPos(datos[i].y)-7}" text-anchor="middle" font-size="11" font-weight="700" fill="var(--tinta)" style="font-variant-numeric:tabular-nums">${fmt(datos[i].y)}</text>`;
+    break; } }
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Gráfico">${g}${marcas}${objetivo}${ultima}</svg>`;
+  el.querySelectorAll('.barra').forEach(n=>{
+    const d = datos[+n.dataset.i];
+    n.addEventListener('mouseenter', ev=>mostrarTip(d.tip, ev));
+    n.addEventListener('mousemove', moverTip);
+    n.addEventListener('mouseleave', ocultarTip);
+  });
+}
+
+/* ================= render: calculadora ================= */
+function renderCalc(){
+  const cf = costosFijosTotal();
+  const hObj = horasObjetivo();
+  const ingUSD = objetivoUSD();
+  const tarifaNeta = (objetivoARS() + cf) / Math.max(1, hObj) / S.tc; // USD/h para netear el objetivo cubriendo costos fijos
+  $('#hero-ingreso').textContent = usd(ingUSD) + ' /mes';
+  $('#hero-ingreso-sub').innerHTML = `${f1.format(hObj)} h/mes × US$ ${fARS.format(S.tarifaObj)}/h · ≈ ${ars(objetivoARS())} al TC BNA (${fARS.format(S.tc)})` +
+    (ingUSD < 6000 ? `<br><span class="pill serio" style="margin-top:6px">≈ Por debajo del mínimo de US$ 6.000/mes</span>` : '');
+  $('#horas-derivadas').innerHTML = `Horas objetivo: <b>${f1.format(hObj)} h/mes</b> · hoy vendés ~<b>${f1.format(horasPromedio6())} h/mes</b> facturadas por hora (promedio últimos 6 meses con datos)`;
+  $('#calc-costos').textContent = ars(cf);
+  $('#calc-fact').textContent = usd(tarifaNeta) + ' /h';
+  const tr = tarifaRealActual();
+  const trUSD = tr ? tr.tarifa/tr.tc : null;
+  $('#calc-real').textContent = tr ? usd(trUSD) + ' /h (' + etiquetaMes(tr.mes) + ')' : 'sin datos';
+  const brecha = $('#hero-brecha');
+  if (tr){
+    const pct = trUSD / S.tarifaObj * 100;
+    if (pct < 85) brecha.innerHTML = `<span class="pill critico">✗ Tarifa real al ${Math.round(pct)} % del objetivo</span><p class="nota" style="margin-top:8px">Vendés a ${usd(trUSD)}/h contra un mínimo de US$ ${fARS.format(S.tarifaObj)}/h. Toda propuesta nueva debería salir a la tarifa objetivo — la vieja cartera se ajusta en la próxima renovación.</p>`;
+    else if (pct < 100) brecha.innerHTML = `<span class="pill serio">≈ Tarifa real al ${Math.round(pct)} % del objetivo</span><p class="nota" style="margin-top:8px">Estás cerca del mínimo de US$ ${fARS.format(S.tarifaObj)}/h: el próximo ajuste te deja en objetivo.</p>`;
+    else brecha.innerHTML = `<span class="pill bueno">✓ Tarifa en objetivo</span><p class="nota" style="margin-top:8px">Tu tarifa real (${usd(trUSD)}/h) cumple el mínimo. El desafío ahora es volumen: ${f1.format(hObj)} h/mes vendidas.</p>`;
+  } else brecha.textContent = '';
+  // presets
+  document.querySelectorAll('#presets .chip').forEach(c=>c.setAttribute('aria-pressed', +c.dataset.hd === +S.horasDia ? 'true':'false'));
+  // meta del trimestre
+  $('#meta-ingreso').textContent = usd(S.metaHoras * S.metaTarifa) + ' /mes';
+  // sensibilidad
+  const filas = [...new Set([20,40,60,80,100,120,140,Math.round(hObj)])].sort((a,b)=>a-b);
+  let html = `<thead><tr><th>Horas vendidas /mes</th><th class="num">Ingreso a US$ ${fARS.format(S.tarifaObj)}/h</th><th class="num">Tarifa p/ sostener ${usd(ingUSD)}</th><th class="num">vs. tarifa real</th></tr></thead><tbody>`;
+  filas.forEach(h=>{
+    const ing = h*S.tarifaObj, tNec = ingUSD/h;
+    const rel = trUSD ? tNec/trUSD : null;
+    const elegido = h === Math.round(hObj);
+    html += `<tr${elegido?' style="background:var(--acento-suave)"':''}><td>${h} h${elegido?' <span class="etiqueta-nuevo">elegido</span>':''}</td><td class="num">${usd(ing)}</td><td class="num">${usd(tNec)}/h</td><td class="num">${rel? f1.format(rel)+'×' : '—'}</td></tr>`;
+  });
+  $('#tabla-sensibilidad').innerHTML = html + '</tbody>';
+}
+
+/* ================= render: objetivo vs real ================= */
+function renderComp(){
+  // solo el período de control (desde jul-26); lo anterior es historia de otro negocio
+  let ag = agregadosMensuales().filter(a=>a.mes >= CONTROL_DESDE);
+  if (!ag.length) ag = [{mes: HOY.slice(0,7), horas:0, tarifa:null, total:0, tc:S.tc, sinDatos:true}];
+  const cf = costosFijosTotal();
+  const hObj = horasObjetivo();
+  const hMeta = S.metaHoras;
+  const metaIngresoUSD = S.metaHoras * S.metaTarifa;
+  const metaFactARS = metaIngresoUSD * S.tc + cf; // facturación necesaria para la meta del trimestre
+  const enUSD = S.moneda === 'USD';
+  document.querySelectorAll('.chip.moneda').forEach(c=>c.setAttribute('aria-pressed', c.dataset.m===S.moneda?'true':'false'));
+
+  // KPIs (del período de control; si aún no hay datos, la tarifa cae al último dato histórico)
+  const conDatos = ag.filter(a=>!a.sinDatos);
+  const trCtrl = conDatos.filter(a=>a.tarifa).slice(-1)[0] || null;
+  const trHist = tarifaRealActual();
+  const tr = trCtrl || trHist;
+  const esHist = !trCtrl && trHist;
+  const horasProm = conDatos.length ? conDatos.reduce((s,a)=>s+a.horas,0)/conDatos.length : 0;
+  const factProm = conDatos.length ? conDatos.reduce((s,a)=>s+a.total/a.tc,0)/conDatos.length : 0;
+  const cobertura = factProm / (metaFactARS/S.tc) * 100;
+  // horas comerciales/internas y utilización (Toggl, desde el inicio del control)
+  const togglTotal = Object.values(HORAS_TOGGL.horas).reduce((s,v)=>s+v,0);
+  const togglComercial = togglDe(S.proyectoComercial);
+  const togglInternas = Object.entries(HORAS_TOGGL.horas).filter(([n])=>clienteToggl(n) === CLIENTE_INTERNO).reduce((s,[,v])=>s+v,0) || togglComercial;
+  const togglFacturable = Math.max(0, togglTotal - togglInternas);
+  const kpis = [
+    {t:'Horas vendidas /mes', v: f1.format(horasProm) + ' h', d:'meta: ' + f1.format(hMeta) + ' h · objetivo: ' + f1.format(hObj) + ' h'},
+    {t:'Tarifa real actual', v: tr? usd(tr.tarifa/tr.tc)+'/h' : '—', d: tr? 'meta: US$ '+fARS.format(S.metaTarifa)+'/h'+(esHist?' · dato histórico':' · '+etiquetaMes(tr.mes)) : 'sin datos aún'},
+    {t:'Facturación prom.', v: usd(factProm), d:'meta: '+usd(metaFactARS/S.tc)+' /mes'},
+    {t:'Cobertura de la meta', v: Math.round(cobertura)+' %', d: cobertura>=100?'meta del trimestre cubierta':'brecha de '+usd(Math.max(0,metaFactARS/S.tc-factProm))+' /mes', estado: cobertura>=100?'bueno':(cobertura>=60?'serio':'critico')}
+  ];
+  $('#kpis').innerHTML = kpis.map(k=>`<div class="carta kpi"><p class="ceja">${k.t}</p><div class="valor" ${k.estado?`style="color:var(--${k.estado})"`:''}>${k.v}</div><div class="detalle">${k.d}</div></div>`).join('');
+
+  // ---- avisos del mes: ¿vender o entregar? ----
+  const avisos = [];
+  const brechaUSD = Math.max(0, metaFactARS/S.tc - factProm);
+  const oportunidades = S.proyectos.filter(p=>['Lead','Propuesta enviada'].includes(p.etapa));
+  const enCierre = oportunidades.filter(p=>p.etapa==='Propuesta enviada').length;
+  const ponderado = oportunidades.reduce((s,p)=>s + (p.fee||0)*((p.prob||0)/100), 0);
+  if (cobertura < 70){
+    avisos.push({e:'critico', i:'✗', t:'Modo venta', d:`La facturación cubre el ${Math.round(cobertura)} % de la meta del trimestre (brecha de ${usd(brechaUSD)}/mes). Tenés ${oportunidades.length} oportunidades en el CRM (${enCierre} con propuesta enviada) y un pipeline ponderado de ${usd(ponderado)}${ponderado < brechaUSD*3 ? ' — insuficiente para la brecha: hay que generar más oportunidades' : ''}.`});
+  } else if (cobertura < 100){
+    avisos.push({e:'serio', i:'≈', t:'Reforzá la venta', d:`Estás al ${Math.round(cobertura)} % de la meta. Falta ${usd(brechaUSD)}/mes: dedicale al menos un bloque semanal al CRM (${enCierre} propuesta${enCierre===1?'':'s'} por cerrar).`});
+  } else {
+    avisos.push({e:'bueno', i:'✓', t:'Meta cubierta — tiempo para entregar', d:`La facturación supera la meta del trimestre. Usá las horas libres para entregables importantes o para adelantar el próximo escalón hacia las ${f1.format(hObj)} h × US$ ${fARS.format(S.tarifaObj)}.`});
+  }
+  const ult = conDatos[conDatos.length-1];
+  if (ult){
+    const libres = Math.max(0, hMeta - ult.horas);
+    if (libres > 0) avisos.push({e:'serio', i:'◷', t:`${f1.format(libres)} h de la meta sin vender`, d:`En ${etiquetaMes(ult.mes)} vendiste ${f1.format(ult.horas)} h de las ${f1.format(hMeta)} h de la meta. Ese tiempo es para vender (CRM) o para adelantar entregables clave.`});
+    else avisos.push({e:'bueno', i:'✓', t:'Horas de la meta vendidas', d:`En ${etiquetaMes(ult.mes)} cubriste las ${f1.format(hMeta)} h de la meta. Cuidado con sobrevender: reservá agenda para entregar bien.`});
+  } else {
+    avisos.push({e:'serio', i:'✎', t:'Aún sin facturación del período de control', d:'El control arrancó el 10/07/2026. Cargá cada factura del mes en «Proyectos» al emitirla — el plan mensual y estos avisos se activan con el primer registro.'});
+  }
+  if (!togglTotal){
+    avisos.push({e:'serio', i:'◷', t:'Toggl sin horas todavía', d:'Sin horas trackeadas no hay tarifa efectiva ni utilización. Arrancá el temporizador en cada bloque de trabajo — la sincronización corre todos los días a las 19 h.'});
+  } else {
+    const utilizacion = togglTotal ? togglFacturable/togglTotal*100 : 0;
+    const togglAdmin = Math.max(0, togglInternas - togglComercial);
+    avisos.push({e: utilizacion>=50?'bueno':'serio', i:'◔', t:`Utilización: ${Math.round(utilizacion)} % facturable`, d:`${f1.format(togglFacturable)} h en proyectos de clientes vs. ${f1.format(togglComercial)} h de venta y ${f1.format(togglAdmin)} h de administración. Las horas internas son inversión: mirá que conviertan.`});
+  }
+  const sinValorizar = oportunidades.filter(p=>!p.fee).length;
+  if (sinValorizar) avisos.push({e:'serio', i:'✎', t:`${sinValorizar} oportunidad${sinValorizar===1?'':'es'} sin fee en el CRM`, d:'Sin fee y probabilidad no existe pipeline ponderado y no puedo decirte si la venta alcanza. Valorizá cada oportunidad, aunque sea a grosso modo.'});
+  const activos = S.proyectos.filter(p=>!['Pausado','Cerrado'].includes(p.etapa));
+  const vencidos = activos.filter(p=>p.fin && p.fin < HOY).sort((a,b)=>a.fin.localeCompare(b.fin));
+  if (vencidos.length){
+    const peores = vencidos.slice(0,3).map(p=>p.nombre.split('—')[0].split('·')[0].trim()).join(', ');
+    avisos.push({e: vencidos.length>4?'critico':'serio', i:'⚑', t:`${vencidos.length} plazo${vencidos.length===1?'':'s'} vencido${vencidos.length===1?'':'s'} en la cartera`, d:`Los más atrasados: ${peores}. Actualizá la fecha o cerrá el pendiente hoy.`});
+  }
+  $('#avisos').innerHTML = avisos.map(a=>`
+    <div style="display:flex; gap:12px; align-items:flex-start; padding:10px 0; border-bottom:1px solid var(--grid)">
+      <span class="pill ${a.e}" style="flex-shrink:0">${a.i} ${a.t}</span>
+      <span style="font-size:13.5px; color:var(--humo)">${a.d}</span>
+    </div>`).join('') || '<p class="nota">Sin avisos.</p>';
+
+  // chart horas (línea = meta del trimestre)
+  grafico('#chart-horas', ag.map(a=>({x:a.mes, y:a.sinDatos?null:a.horas, tip:`<b>${etiquetaMes(a.mes)}</b><br>${f1.format(a.horas)} h vendidas por hora<br>${a.tarifa? 'tarifa prom. '+ars(a.tarifa)+'/h':''}`})), {tipo:'barras', objetivo:hMeta, fmt:v=>f1.format(v)+' h', alto:230});
+
+  // chart tarifa (línea = tarifa de la meta trimestral)
+  const fmtT = enUSD ? (v=>usd(v)) : (v=>ars(v));
+  grafico('#chart-tarifa', ag.map(a=>({x:a.mes, y:a.tarifa? (enUSD? a.tarifa/a.tc : a.tarifa) : null, tip:`<b>${etiquetaMes(a.mes)}</b><br>tarifa prom.: ${ars(a.tarifa||0)}/h<br>≈ ${usd((a.tarifa||0)/a.tc)}/h (TC ${fARS.format(a.tc)})`})), {tipo:'linea', objetivo: enUSD? S.metaTarifa : S.metaTarifa*S.tc, fmt:fmtT, alto:250});
+
+  // chart facturación (línea = facturación necesaria de la meta)
+  grafico('#chart-fact', ag.map(a=>({x:a.mes, y:a.sinDatos?null:(enUSD? a.total/a.tc : a.total), tip:`<b>${etiquetaMes(a.mes)}</b><br>facturación: ${ars(a.total)}<br>≈ ${usd(a.total/a.tc)}`})), {tipo:'barras', objetivo: enUSD? metaFactARS/S.tc : metaFactARS, fmt: enUSD? (v=>usd(v)) : (v=>'$ '+fARS.format(Math.round(v/1000))+' mil'), alto:250});
+
+  // tablas
+  let th = '<thead><tr><th>Mes</th><th class="num">Horas</th><th class="num">Tarifa prom. ARS/h</th><th class="num">Tarifa USD/h</th><th class="num">Facturación ARS</th><th class="num">Facturación USD</th></tr></thead><tbody>';
+  ag.forEach(a=>{
+    th += a.sinDatos
+      ? `<tr><td>${etiquetaMes(a.mes)}</td><td class="num" colspan="5" style="color:var(--apagado)">sin registro</td></tr>`
+      : `<tr><td>${etiquetaMes(a.mes)}</td><td class="num">${f1.format(a.horas)}</td><td class="num">${a.tarifa?fARS.format(Math.round(a.tarifa)):'—'}</td><td class="num">${a.tarifa?fUSD2.format(a.tarifa/a.tc):'—'}</td><td class="num">${fARS.format(Math.round(a.total))}</td><td class="num">${fUSD.format(Math.round(a.total/a.tc))}</td></tr>`;
+  });
+  $('#tabla-mensual').innerHTML = '<table>'+th+'</tbody></table>';
+  $('#tabla-horas').innerHTML = '<table><thead><tr><th>Mes</th><th class="num">Horas reales</th><th class="num">Meta</th></tr></thead><tbody>' +
+    ag.map(a=>`<tr><td>${etiquetaMes(a.mes)}</td><td class="num">${a.sinDatos?'—':f1.format(a.horas)}</td><td class="num">${f1.format(hMeta)}</td></tr>`).join('') + '</tbody></table>';
+}
+
+/* ================= render: cartera editable (ejecución + CRM) ================= */
+const proyPorId = id => S.proyectos.find(p=>p.id===id);
+const selectHtml = (p, campo, opciones, vacio) =>
+  `<select data-cp="${p.id}" data-cf="${campo}" style="min-width:110px">${vacio?`<option value=""${!p[campo]?' selected':''}>—</option>`:''}${opciones.map(o=>`<option value="${esc(o)}"${p[campo]===o?' selected':''}>${esc(o)}</option>`).join('')}</select>`;
+const numHtml = (p, campo, paso, ancho) =>
+  `<input type="number" data-cp="${p.id}" data-cf="${campo}" value="${p[campo]||''}" placeholder="0" min="0" step="${paso}" style="max-width:${ancho||86}px">`;
+const fechaHtml = (p, campo) =>
+  `<input type="date" data-cp="${p.id}" data-cf="${campo}" value="${p[campo]||''}" style="max-width:135px">`;
+const clienteHtml = p =>
+  `<input data-cp="${p.id}" data-cf="cliente" value="${esc(p.cliente||'')}" list="lista-clientes-toggl" placeholder="cliente" style="min-width:130px; max-width:150px; text-align:left">`;
+
+function mesesActivos(p){ // meses transcurridos del contrato (para Fee mensual)
+  if (!p.inicio) return 1;
+  const fin = (p.fin && p.fin < HOY) ? p.fin : HOY;
+  if (fin < p.inicio) return 1;
+  const [a1,m1] = p.inicio.split('-').map(Number), [a2,m2] = fin.split('-').map(Number);
+  return Math.max(1, (a2-a1)*12 + (m2-m1) + 1);
+}
+function valorContrato(p){ // valor devengado a hoy según modalidad
+  if (p.modalidad === 'T&M') return (p.tarifaHora||0) * togglDe(p.nombre);
+  if (p.modalidad === 'Fee mensual') return (p.fee||0) * mesesActivos(p);
+  return p.fee||0;
+}
+function mesesVigencia(p){ // duración planificada (para el total de Fee mensual)
+  if (p.inicio && p.fin && p.fin >= p.inicio){
+    const [a1,m1] = p.inicio.split('-').map(Number), [a2,m2] = p.fin.split('-').map(Number);
+    return Math.max(1, (a2-a1)*12 + (m2-m1) + 1);
+  }
+  return mesesActivos(p);
+}
+function totalProyecto(p){ // 1. Total Proyecto: propuesta (fee fijo) o estimado total de vigencia (T&M)
+  if (p.modalidad === 'Fee mensual') return (p.fee||0) * mesesVigencia(p);
+  return p.fee||0; // Fee por etapa: total propuesta · T&M: estimado total cargado a mano
+}
+
+/* ================= render: dashboard de la cartera ================= */
+function horasTogglClasificadas(){
+  const nk = normalizarNombre;
+  const esCortesia = n => S.proyectos.some(p=>p.cobro==='Cortesía' && nk(p.nombre)===nk(n));
+  let total=0, comercial=0, internas=0, cortesia=0;
+  Object.entries(HORAS_TOGGL.horas).forEach(([n,h])=>{
+    total += h;
+    if (nk(n) === nk(S.proyectoComercial)){ comercial += h; internas += h; }
+    else if (clienteToggl(n) === CLIENTE_INTERNO) internas += h;
+    else if (esCortesia(n)) cortesia += h;
+  });
+  return {total, comercial, internas, cortesia, facturables: Math.max(0, total - internas - cortesia)};
+}
+function renderDashboard(){
+  const kpi = k => `<div class="carta kpi" style="box-shadow:none"><p class="ceja">${k.t}</p><div class="valor" ${k.estado?`style="color:var(--${k.estado})"`:''}>${k.v}</div><div class="detalle">${k.d}</div></div>`;
+  const ejec = S.proyectos.filter(p=>ETAPAS_EJECUCION.includes(p.etapa));
+  const vencidos = ejec.filter(p=>p.fin && p.fin < HOY).length;
+  const ht = horasTogglClasificadas();
+  // operativos
+  $('#dash-operativo').innerHTML = [
+    {t:'Proyectos en ejecución', v:ejec.length, d:`${ejec.filter(p=>p.cobro==='Cortesía').length} en cortesía`},
+    {t:'Plazos vencidos', v:vencidos, d:'fecha fin pasada', estado: vencidos>2?'critico':(vencidos>0?'serio':'bueno')},
+    {t:'Hs facturables', v:f1.format(ht.facturables)+' h', d:'Toggl · proyectos de clientes'},
+    {t:'Hs no facturables', v:f1.format(ht.internas + ht.cortesia)+' h', d:`${f1.format(ht.internas)} internas · ${f1.format(ht.cortesia)} cortesía`}
+  ].map(kpi).join('');
+  // comerciales
+  const carteraFact = S.proyectos.filter(p=>(ETAPAS_EJECUCION.includes(p.etapa) || p.etapa==='Cerrado') && p.cobro !== 'Cortesía');
+  const totalPropuestas = carteraFact.reduce((s,p)=>s+totalProyecto(p),0);
+  $('#dash-comercial').innerHTML = [
+    {t:'Total propuestas', v:usd(totalPropuestas), d:'cartera en ejecución, sin cortesías'},
+    {t:'Inversión en cortesías', v:usd(ht.cortesia * S.tarifaObj), d:`${f1.format(ht.cortesia)} h × US$ ${fARS.format(S.tarifaObj)}/h`},
+    {t:'Gestión comercial', v:usd(ht.comercial * S.tarifaObj), d:`${f1.format(ht.comercial)} h invertidas en venta`}
+  ].map(kpi).join('');
+  // financieros
+  const facturado = carteraFact.reduce((s,p)=>s+(p.facturado||0),0);
+  const cobrado = carteraFact.reduce((s,p)=>s+(p.cobrado||0),0);
+  const porCobrar = carteraFact.reduce((s,p)=>s+Math.max(0,(p.facturado||0)-(p.cobrado||0)),0);
+  const aFacturar = Math.max(0, totalPropuestas - facturado);
+  $('#dash-financiero').innerHTML = [
+    {t:'Total cobrado', v:usd(cobrado), d:'acumulado de la cartera', estado:'bueno'},
+    {t:'Total a cobrar', v:usd(porCobrar), d:'facturado − cobrado', estado: porCobrar>0?'serio':undefined},
+    {t:'A facturar', v:usd(aFacturar), d:'total propuestas − facturado', estado: aFacturar>0?'serio':undefined}
+  ].map(kpi).join('');
+  $('#dash-tarifa-ref').textContent = fARS.format(S.tarifaObj);
+}
+
+function renderCartera(){
+  const ejec = S.proyectos.filter(p=>ETAPAS_EJECUCION.includes(p.etapa));
+
+  // datalist de clientes: el padrón (Toggl + manuales)
+  let dl = document.querySelector('#lista-clientes-toggl');
+  if (!dl){ dl = document.createElement('datalist'); dl.id = 'lista-clientes-toggl'; document.body.appendChild(dl); }
+  dl.innerHTML = S.clientes.map(c=>`<option value="${esc(c)}">`).join('');
+
+  let h = `<table><thead><tr><th>Proyecto</th><th>Cliente</th><th>Marca</th><th>Etapa</th><th>Modalidad</th><th class="num">Fee USD</th><th class="num">US$/h (T&amp;M)</th><th class="num">Total proy.</th><th class="num">Hs est.</th><th class="num">Hs Toggl</th><th class="num">Avance</th><th class="num">Tarifa efectiva</th><th>Inicio</th><th>Fin</th><th>Cobro</th><th class="num">Facturado USD</th><th class="num">Cobrado USD</th><th class="num">Por cobrar</th><th>Salud</th><th></th></tr></thead><tbody>`;
+  ejec.slice().sort((a,b)=>a.nombre.localeCompare(b.nombre)).forEach(p=>{
+      const toggl = togglDe(p.nombre);
+      const total = totalProyecto(p);
+      const porCobrar = Math.max(0, (p.facturado||0) - (p.cobrado||0));
+      const tEfec = p.modalidad === 'T&M' ? (p.tarifaHora||null) : (toggl > 0 && p.fee > 0 ? valorContrato(p)/toggl : null);
+      const avance = p.hsEst > 0 && toggl > 0 ? toggl/p.hsEst*100 : null;
+      const avancePill = avance == null ? '—' : `<span class="pill ${avance<=100?'bueno':(avance<=130?'serio':'critico')}">${Math.round(avance)} %</span>`;
+      const tPill = tEfec == null ? '—' : `<span class="pill ${tEfec>=S.tarifaObj?'bueno':(tEfec>=S.tarifaObj*0.7?'serio':'critico')}">${usd(tEfec)}/h</span>`;
+      const finVencido = p.fin && p.fin < HOY;
+      const feeHint = p.modalidad==='Fee mensual' ? '/mes' : (p.modalidad==='T&M' ? 'estim. total' : 'total propuesta');
+      h += `<tr>
+        <td style="min-width:210px"><input data-cp="${p.id}" data-cf="nombre" value="${esc(p.nombre)}" style="max-width:none; text-align:left; font-weight:600">
+          <input data-cp="${p.id}" data-cf="notas" value="${esc(p.notas||'')}" placeholder="notas / próximo paso" style="max-width:none; text-align:left; font-size:12px; margin-top:3px"></td>
+        <td>${clienteHtml(p)}</td>
+        <td>${selectHtml(p,'marca',MARCAS)}</td>
+        <td>${selectHtml(p,'etapa',ETAPAS)}</td>
+        <td>${selectHtml(p,'modalidad',MODALIDADES)}</td>
+        <td class="num">${numHtml(p,'fee','100')}<span class="sub" style="text-align:right">${feeHint}</span></td>
+        <td class="num">${p.modalidad==='T&M' ? numHtml(p,'tarifaHora','5','70') : '<span style="color:var(--apagado)">—</span>'}</td>
+        <td class="num" style="font-variant-numeric:tabular-nums; font-weight:600">${total?fUSD.format(Math.round(total)):'—'}</td>
+        <td class="num">${numHtml(p,'hsEst','5','70')}</td>
+        <td class="num">${toggl?f1.format(toggl):'—'}</td>
+        <td class="num">${avancePill}</td>
+        <td class="num">${tPill}</td>
+        <td>${fechaHtml(p,'inicio')}</td>
+        <td>${fechaHtml(p,'fin')}${finVencido?' <span class="vencido">⚑</span>':''}</td>
+        <td>${selectHtml(p,'cobro',ESTADOS_COBRO)}</td>
+        <td class="num">${numHtml(p,'facturado','100')}</td>
+        <td class="num">${numHtml(p,'cobrado','100')}</td>
+        <td class="num" style="font-variant-numeric:tabular-nums; font-weight:700${porCobrar?'; color:var(--serio)':''}">${fUSD.format(Math.round(porCobrar))}</td>
+        <td>${selectHtml(p,'salud',['V','A','R'],true)}</td>
+        <td><button class="accion-tabla" data-cdel="${p.id}">borrar</button></td></tr>`;
+  });
+  if (!ejec.length) h += '<tr><td colspan="20" style="color:var(--apagado)">Sin proyectos en ejecución — agregá uno o cambiá la etapa de una oportunidad del CRM.</td></tr>';
+  $('#tabla-pipeline').innerHTML = h + '</tbody></table>';
+
+  // --- CRM ---
+  const crm = S.proyectos.filter(p=>ETAPAS_COMERCIAL.includes(p.etapa) || p.etapa==='Cerrado');
+  const activas = crm.filter(p=>['Lead','Propuesta enviada'].includes(p.etapa));
+  const ponderado = activas.reduce((s,p)=>s + (p.fee||0)*((p.prob||0)/100), 0);
+  const sinFee = activas.filter(p=>!p.fee).length;
+  const vencidasCrm = activas.filter(p=>p.fin && p.fin < HOY).length;
+  const resumenC = [
+    {t:'Oportunidades activas', v:activas.length, d:`${crm.filter(p=>p.etapa==='Pausado').length} pausadas · ${crm.filter(p=>p.etapa==='Cerrado').length} cerradas`},
+    {t:'Pipeline ponderado', v:usd(ponderado), d:'fee × probabilidad', estado: ponderado===0&&activas.length?'serio':undefined},
+    {t:'Sin valorizar', v:sinFee, d:'oportunidades sin fee', estado: sinFee>0?'serio':'bueno'},
+    {t:'Fechas límite vencidas', v:vencidasCrm, d:'requieren acción hoy', estado: vencidasCrm>2?'critico':(vencidasCrm>0?'serio':'bueno')}
+  ];
+  $('#crm-resumen').innerHTML = resumenC.map(k=>`<div class="carta kpi"><p class="ceja">${k.t}</p><div class="valor" ${k.estado?`style="color:var(--${k.estado})"`:''}>${k.v}</div><div class="detalle">${k.d}</div></div>`).join('');
+
+  let hc = `<table><thead><tr><th>Oportunidad</th><th>Cliente</th><th>Marca</th><th>Etapa</th><th>Modalidad</th><th class="num">Fee USD</th><th class="num">Prob. %</th><th class="num">Ponderado</th><th>Fecha límite</th><th>Salud</th><th></th></tr></thead><tbody>`;
+  ['Propuesta enviada','Lead','Pausado','Cerrado'].forEach(etapa=>{
+    const del = crm.filter(p=>p.etapa===etapa);
+    if (!del.length) return;
+    hc += `<tr class="grupo-etapa"><td colspan="11">${etapa} · ${del.length}</td></tr>`;
+    del.forEach(p=>{
+      const pond = (p.fee||0)*((p.prob||0)/100);
+      const finVencido = p.fin && p.fin < HOY && etapa !== 'Cerrado' && etapa !== 'Pausado';
+      hc += `<tr>
+        <td style="min-width:210px"><input data-cp="${p.id}" data-cf="nombre" value="${esc(p.nombre)}" style="max-width:none; text-align:left; font-weight:600">
+          <input data-cp="${p.id}" data-cf="notas" value="${esc(p.notas||'')}" placeholder="próximo paso" style="max-width:none; text-align:left; font-size:12px; margin-top:3px"></td>
+        <td>${clienteHtml(p)}</td>
+        <td>${selectHtml(p,'marca',MARCAS)}</td>
+        <td>${selectHtml(p,'etapa',ETAPAS)}</td>
+        <td>${selectHtml(p,'modalidad',MODALIDADES)}</td>
+        <td class="num">${numHtml(p,'fee','100')}</td>
+        <td class="num"><input type="number" data-cp="${p.id}" data-cf="prob" value="${p.prob!=null?p.prob:''}" placeholder="%" min="0" max="100" step="10" style="max-width:64px"></td>
+        <td class="num">${pond?fUSD.format(Math.round(pond)):'—'}</td>
+        <td>${fechaHtml(p,'fin')}${finVencido?' <span class="vencido">⚑</span>':''}</td>
+        <td>${selectHtml(p,'salud',['V','A','R'],true)}</td>
+        <td><button class="accion-tabla" data-cdel="${p.id}">borrar</button></td></tr>`;
+    });
+  });
+  if (!crm.length) hc += '<tr><td colspan="11" style="color:var(--apagado)">Sin oportunidades — agregá la primera.</td></tr>';
+  $('#tabla-crm').innerHTML = hc + '</tbody></table>';
+
+  // eventos de edición
+  document.querySelectorAll('[data-cp]').forEach(el=>el.addEventListener('change', e=>{
+    const p = proyPorId(e.target.dataset.cp); if (!p) return;
+    const f = e.target.dataset.cf;
+    let v = e.target.value;
+    if (['fee','hsEst','cobrado','facturado','tarifaHora'].includes(f)) v = Math.max(0, +v||0);
+    if (f === 'prob') v = v === '' ? null : Math.min(100, Math.max(0, +v||0));
+    p[f] = v;
+    if (f === 'cobro' && v === 'Cobrado'){ p.facturado = totalProyecto(p); p.cobrado = totalProyecto(p); }
+    // no se puede cobrar lo que no se facturó: al cargar un cobro mayor, el facturado acompaña
+    if (f === 'cobrado' && (p.cobrado||0) > (p.facturado||0)) p.facturado = p.cobrado;
+    // el estado de cobro se deriva de los montos (salvo Cortesía, que es decisión manual)
+    if (['facturado','cobrado','fee','tarifaHora','modalidad'].includes(f) && p.cobro !== 'Cortesía'){
+      const tot = totalProyecto(p);
+      p.cobro = (p.cobrado > 0 && tot > 0 && p.cobrado >= tot) ? 'Cobrado'
+        : (p.cobrado > 0 ? 'Cobro parcial'
+        : (p.facturado > 0 ? 'Facturado' : 'Sin facturar'));
+    }
+    guardar(); renderTodo();
+  }));
+  document.querySelectorAll('[data-cdel]').forEach(b=>b.addEventListener('click', ()=>{
+    const p = proyPorId(b.dataset.cdel);
+    S.proyectos = S.proyectos.filter(x=>x.id!==b.dataset.cdel);
+    guardar(); renderTodo();
+  }));
+}
+/* ================= render: ABM de clientes ================= */
+function renderClientes(){
+  const enToggl = c => TOGGL_CATALOGO.clientes.includes(c);
+  let h = '<table><thead><tr><th>Cliente</th><th class="num">Proyectos</th><th class="num">Devengado USD</th><th class="num">Pipeline USD</th><th>Origen</th><th></th></tr></thead><tbody>';
+  S.clientes.forEach((c,i)=>{
+    const proys = S.proyectos.filter(p=>p.cliente===c);
+    const dev = proys.filter(p=>ETAPAS_EJECUCION.includes(p.etapa)||p.etapa==='Cerrado').reduce((s,p)=>s+valorContrato(p),0);
+    const pipe = proys.filter(p=>['Lead','Propuesta enviada'].includes(p.etapa)).reduce((s,p)=>s+(p.fee||0)*((p.prob||0)/100),0);
+    h += `<tr><td><input data-cli="${i}" value="${esc(c)}" style="max-width:none; min-width:200px; text-align:left; font-weight:600"></td>
+      <td class="num">${proys.length||'—'}</td>
+      <td class="num">${dev?fUSD.format(Math.round(dev)):'—'}</td>
+      <td class="num">${pipe?fUSD.format(Math.round(pipe)):'—'}</td>
+      <td>${enToggl(c)?'<span class="chip-marca horizonte">Toggl</span>':'<span class="chip-marca wokai">manual</span>'}</td>
+      <td>${!proys.length?`<button class="accion-tabla" data-clidel="${i}">quitar</button>`:''}</td></tr>`;
+  });
+  if (!S.clientes.length) h += '<tr><td colspan="6" style="color:var(--apagado)">Sin clientes — se importan de Toggl o agregalos a mano.</td></tr>';
+  $('#tabla-clientes').innerHTML = h + '</tbody></table>';
+  document.querySelectorAll('[data-cli]').forEach(inp=>inp.addEventListener('change', e=>{
+    const i = +e.target.dataset.cli, nuevo = e.target.value.trim();
+    if (!nuevo) { renderClientes(); return; }
+    const viejo = S.clientes[i];
+    S.proyectos.forEach(p=>{ if (p.cliente === viejo) p.cliente = nuevo; });
+    S.clientes[i] = nuevo;
+    S.clientes = [...new Set(S.clientes)].sort((a,b)=>a.localeCompare(b));
+    guardar(); renderTodo();
+  }));
+  document.querySelectorAll('[data-clidel]').forEach(b=>b.addEventListener('click', ()=>{
+    S.clientes.splice(+b.dataset.clidel, 1);
+    guardar(); renderClientes();
+  }));
+}
+
+function nuevoProyecto(etapa){
+  S.proyectos.unshift({id:'p'+Date.now().toString(36), nombre:'Cliente · Proyecto', cliente:'', marca:'horizonte.global',
+    etapa, tipo:'', modalidad:'Fee por etapa', fee:0, tarifaHora:0, prob: etapa==='Lead'?10:(etapa==='Propuesta enviada'?40:null), hsEst:0,
+    inicio: etapa==='Delivery'||etapa==='Discovery' ? HOY : '', fin:'', cobro:'Sin facturar', facturado:0, cobrado:0, salud:'V', notas:''});
+  guardar(); renderTodo();
+}
+
+/* ================= render: planilla mensual (estimado y real, proyectos × meses) ================= */
+function mesesDeAnio(anio){
+  const desde = anio === CONTROL_DESDE.slice(0,4) ? +CONTROL_DESDE.slice(5,7) : 1;
+  return Array.from({length: 12-desde+1}, (_,i)=>`${anio}-${String(desde+i).padStart(2,'0')}`);
+}
+function renderEstimados(){
+  const rs = registros();
+  // años: del inicio del control al año próximo
+  const anioInicio = +CONTROL_DESDE.slice(0,4), anioActual = +HOY.slice(0,4);
+  const anios = []; for (let a = anioInicio; a <= anioActual+1; a++) anios.push(String(a));
+  const sel = $('#est-anio');
+  const prev = sel.value;
+  const anio = anios.includes(prev) ? prev : String(anioActual);
+  sel.innerHTML = anios.map(a=>`<option value="${a}"${a===anio?' selected':''}>${a}</option>`).join('');
+  const meses = mesesDeAnio(anio);
+
+  // real por proyecto y mes (solo registros del período de control)
+  const realPor = {};
+  rs.filter(r=>r.mes.startsWith(anio) && r.mes >= CONTROL_DESDE).forEach(r=>{
+    const k = claveProy(r)+'@'+r.mes; realPor[k] = (realPor[k]||0) + (r.monto||0);
+  });
+  // filas: cartera en ejecución que factura (las cortesías no, hasta que cambien de estado de cobro)
+  // + filas fijadas a mano (simulación) + todo lo que tenga plan o real en el año
+  const facturaEnEjecucion = p => ETAPAS_EJECUCION.includes(p.etapa) && p.cobro !== 'Cortesía';
+  const nombres = new Set(S.proyectos.filter(facturaEnEjecucion).map(p=>p.nombre));
+  S.filasPlanilla.forEach(n=>nombres.add(n));
+  meses.forEach(m=>Object.keys(S.estimados[m]||{}).forEach(k=>nombres.add(k)));
+  Object.keys(realPor).forEach(k=>nombres.add(k.split('@')[0]));
+  const filas = [...nombres].sort();
+  const esAutomatica = n => S.proyectos.some(p=>facturaEnEjecucion(p) && p.nombre===n);
+
+  let h = `<table style="min-width:${260+meses.length*112}px"><thead><tr><th>Proyecto</th>${meses.map(m=>`<th class="num">${etiquetaMes(m)}</th>`).join('')}<th class="num">Total año</th></tr></thead><tbody>`;
+  const totE = {}, totR = {};
+  filas.forEach(nombre=>{
+    let filaE = 0, filaR = 0;
+    const celdas = meses.map(m=>{
+      const est = (S.estimados[m]||{})[nombre]||0;
+      const real = realPor[nombre+'@'+m]||0;
+      filaE += est; filaR += real; totE[m]=(totE[m]||0)+est; totR[m]=(totR[m]||0)+real;
+      const clase = real && est ? (real>=est*0.95?'bueno':(real>=est*0.6?'serio':'critico')) : '';
+      return `<td class="num" style="vertical-align:top">
+        <input type="number" data-plan-mes="${m}" data-plan-clave="${esc(nombre)}" value="${est||''}" placeholder="·" min="0" step="50000" style="max-width:96px">
+        <span class="sub" style="text-align:right${clase?`; color:var(--${clase}); font-weight:700`:''}">${real?fARS.format(Math.round(real)):'&nbsp;'}</span></td>`;
+    }).join('');
+    const quitable = !esAutomatica(nombre) && !filaE && !filaR;
+    h += `<tr><td style="min-width:190px; font-weight:600">${esc(nombre)}${quitable?` <button class="accion-tabla" data-quitafila="${esc(nombre)}">quitar</button>`:''}</td>${celdas}
+      <td class="num" style="vertical-align:top; font-variant-numeric:tabular-nums">${filaE?fARS.format(filaE):'—'}<span class="sub" style="text-align:right">${filaR?fARS.format(Math.round(filaR)):'&nbsp;'}</span></td></tr>`;
+  });
+  if (!filas.length) h += `<tr><td colspan="${meses.length+2}" style="color:var(--apagado)">Planilla vacía — agregá el primer proyecto abajo.</td></tr>`;
+  const sumE = meses.reduce((s,m)=>s+(totE[m]||0),0), sumR = meses.reduce((s,m)=>s+(totR[m]||0),0);
+  h += `<tr class="total"><td>Total estimado ARS</td>${meses.map(m=>`<td class="num">${totE[m]?fARS.format(totE[m]):'—'}</td>`).join('')}<td class="num">${fARS.format(sumE)}</td></tr>`;
+  h += `<tr class="total"><td>Total real ARS</td>${meses.map(m=>`<td class="num">${totR[m]?fARS.format(Math.round(totR[m])):'—'}</td>`).join('')}<td class="num">${fARS.format(Math.round(sumR))}</td></tr>`;
+  h += `<tr class="total"><td>Total real USD</td>${meses.map(m=>`<td class="num">${totR[m]?fUSD.format(Math.round(totR[m]/(TC_MES[m]||S.tc))):'—'}</td>`).join('')}<td class="num">${fUSD.format(Math.round(sumR/S.tc))}</td></tr>`;
+  $('#tabla-estimados').innerHTML = h + '</tbody></table>';
+
+  // datalist: todos los proyectos y oportunidades (cualquier etapa) que aún no están como fila
+  const conocidos = [...new Set([...S.proyectos.map(p=>p.nombre), ...rs.map(claveProy)])].filter(n=>!nombres.has(n)).sort();
+  $('#lista-proyectos-est').innerHTML = conocidos.map(c=>`<option value="${esc(c)}">`).join('');
+
+  document.querySelectorAll('[data-plan-mes]').forEach(i=>i.addEventListener('change', e=>{
+    const m = e.target.dataset.planMes, k = e.target.dataset.planClave;
+    const v = Math.max(0, +e.target.value||0);
+    if (!S.estimados[m]) S.estimados[m] = {};
+    if (v) S.estimados[m][k] = v; else { delete S.estimados[m][k]; if (!Object.keys(S.estimados[m]).length) delete S.estimados[m]; }
+    guardar(); renderEstimados();
+  }));
+  document.querySelectorAll('[data-quitafila]').forEach(b=>b.addEventListener('click', ()=>{
+    S.filasPlanilla = S.filasPlanilla.filter(n=>n!==b.dataset.quitafila);
+    guardar(); renderEstimados();
+  }));
+}
+
+/* ================= render: proyectos ================= */
+function renderProy(){
+  const rs = registros();
+  // filtros
+  const clientes = [...new Set(rs.map(r=>r.cliente))].sort();
+  const meses = [...new Set(rs.map(r=>r.mes))].sort().reverse();
+  const fc = $('#filtro-cliente'), fm = $('#filtro-mes');
+  const fcv = fc.value, fmv = fm.value;
+  fc.innerHTML = '<option value="">Todos</option>' + clientes.map(c=>`<option${c===fcv?' selected':''}>${esc(c)}</option>`).join('');
+  fm.innerHTML = '<option value="">Todos</option>' + meses.map(m=>`<option value="${m}"${m===fmv?' selected':''}>${etiquetaMes(m)}</option>`).join('');
+  $('#lista-clientes').innerHTML = clientes.map(c=>`<option value="${esc(c)}">`).join('');
+
+  const vis = rs.filter(r => (!fc.value || r.cliente===fc.value) && (!fm.value || r.mes===fm.value))
+                .sort((a,b)=> b.mes.localeCompare(a.mes) || a.cliente.localeCompare(b.cliente));
+  const celda = (r, campo, valor, paso) => {
+    const rid = r.nuevo ? 'e:'+r.idx : 'b:'+r.baseIdx;
+    return `<td class="num"><input type="number" data-rid="${rid}" data-campo="${campo}" value="${valor||''}" placeholder="0" min="0" step="${paso}" style="max-width:92px"></td>`;
+  };
+  let h = '<table><thead><tr><th>Mes</th><th>Cliente</th><th>Proyecto</th><th class="num">H. vendidas</th><th class="num">H. insumidas</th><th class="num">Tarifa ARS/h</th><th class="num">Monto ARS</th><th></th></tr></thead><tbody>';
+  vis.forEach(r=>{
+    const rid = r.nuevo ? 'e:'+r.idx : 'b:'+r.baseIdx;
+    h += `<tr><td>${etiquetaMes(r.mes)}</td><td>${esc(r.cliente)}${r.nuevo?'<span class="etiqueta-nuevo">nuevo</span>':(r.editado?'<span class="etiqueta-nuevo">editado</span>':'')}</td><td>${esc(r.proyecto)}</td>
+      ${celda(r,'horas',r.horas,'0.5')}${celda(r,'insumidas',r.insumidas,'0.5')}${celda(r,'tarifa',r.tarifa?Math.round(r.tarifa):0,'500')}${celda(r,'monto',r.monto?Math.round(r.monto):0,'1000')}
+      <td><button class="accion-tabla" data-del="${rid}">borrar</button></td></tr>`;
+  });
+  const totH = vis.reduce((s,r)=>s+(r.horas||0),0), totI = vis.reduce((s,r)=>s+(r.insumidas||0),0), totM = vis.reduce((s,r)=>s+(r.monto||0),0);
+  h += `<tr class="total"><td colspan="3">Total (${vis.length} registros)</td><td class="num">${f1.format(totH)}</td><td class="num">${totI?f1.format(totI):'—'}</td><td class="num"></td><td class="num">${fARS.format(Math.round(totM))}</td><td></td></tr></tbody></table>`;
+  $('#tabla-registros').innerHTML = h;
+  if (S.baseDel.length){
+    $('#tabla-registros').insertAdjacentHTML('beforeend',
+      `<p class="aviso">${S.baseDel.length} registro${S.baseDel.length===1?'':'s'} del Excel eliminado${S.baseDel.length===1?'':'s'} en este navegador. <button class="accion-tabla" id="btn-restaurar" style="color:var(--acento-ink)">Restaurar todos</button></p>`);
+    $('#btn-restaurar').addEventListener('click', ()=>{ S.baseDel = []; guardar(); renderTodo(); });
+  }
+  document.querySelectorAll('#tabla-registros [data-campo]').forEach(i=>i.addEventListener('change', e=>{
+    const [tipo, idx] = e.target.dataset.rid.split(':');
+    const campo = e.target.dataset.campo, v = Math.max(0, +e.target.value||0);
+    if (tipo === 'e'){
+      const pos = {tarifa:3, horas:4, monto:5, insumidas:6}[campo];
+      S.extras[+idx][pos] = v;
+    } else {
+      const ed = S.baseEdits[+idx] || {};
+      ed[campo] = v; S.baseEdits[+idx] = ed;
+    }
+    guardar(); renderTodo();
+  }));
+  document.querySelectorAll('#tabla-registros [data-del]').forEach(b=>b.addEventListener('click', ()=>{
+    const [tipo, idx] = b.dataset.del.split(':');
+    if (tipo === 'e') S.extras.splice(+idx,1);
+    else if (!S.baseDel.includes(+idx)) S.baseDel.push(+idx);
+    guardar(); renderTodo();
+  }));
+
+  // rollup por proyecto: tarifa de venta vs. tarifa efectiva
+  const mapa = new Map();
+  rs.forEach(r=>{
+    const k = claveProy(r);
+    const o = mapa.get(k) || {k, cliente:r.cliente, proyecto:r.proyecto, horas:0, insumidas:0, monto:0, usdV:0, meses:new Set()};
+    o.horas += r.horas||0; o.insumidas += r.insumidas||0; o.monto += r.monto||0;
+    o.usdV += (r.monto||0) / (TC_MES[r.mes] || S.tc);
+    o.meses.add(r.mes); mapa.set(k,o);
+  });
+  const lista = [...mapa.values()].sort((a,b)=>b.monto-a.monto);
+  const totalGeneral = lista.reduce((s,o)=>s+o.monto,0) || 1;
+  const pillTarifa = t => {
+    if (t == null) return '<span style="color:var(--apagado)">—</span>';
+    const pct = t/S.tarifaObj*100;
+    const clase = pct>=100?'bueno':(pct>=70?'serio':'critico');
+    const icono = pct>=100?'✓':(pct>=70?'≈':'✗');
+    return `<span class="pill ${clase}">${icono} ${usd(t)}/h</span>`;
+  };
+  let ph = `<table><thead><tr><th>Proyecto</th><th class="num">Facturado USD</th><th class="num">H. vendidas</th><th class="num">Tarifa venta</th><th class="num">H. insumidas</th><th class="num">Tarifa efectiva vs. US$ ${fARS.format(S.tarifaObj)}</th><th class="num">% del total</th></tr></thead><tbody>`;
+  lista.forEach(o=>{
+    const toggl = togglDe(o.k);
+    const auto = o.insumidas + toggl; // registros manuales + medido en Toggl
+    const insum = S.horasInsumidas[o.k] != null ? +S.horasInsumidas[o.k] : auto;
+    const tVenta = o.horas > 0 ? o.usdV/o.horas : null;
+    const tEfec = insum > 0 ? o.usdV/insum : null;
+    ph += `<tr><td>${esc(o.proyecto)}<span class="sub">${esc(o.cliente)} · ${o.meses.size} mes${o.meses.size===1?'':'es'}${toggl?` · Toggl: ${f1.format(toggl)} h`:''}</span></td>
+      <td class="num">${fUSD.format(Math.round(o.usdV))}</td>
+      <td class="num">${o.horas?f1.format(o.horas):'—'}</td>
+      <td class="num">${tVenta!=null? usd(tVenta)+'/h' : '<span style="color:var(--apagado)">precio fijo</span>'}</td>
+      <td class="num"><input type="number" data-insum="${esc(o.k)}" value="${S.horasInsumidas[o.k] != null ? S.horasInsumidas[o.k] : (auto||'')}" placeholder="0" min="0" step="1"></td>
+      <td class="num">${pillTarifa(tEfec)}</td>
+      <td class="num">${(o.monto/totalGeneral*100).toFixed(1)} %</td></tr>`;
+  });
+  $('#tabla-proyectos').innerHTML = ph + '</tbody></table>';
+  // horas de Toggl que no matchean ningún proyecto del panel
+  const clavesPanel = new Set(lista.map(o=>normalizarNombre(o.k)));
+  const sinMatch = Object.entries(HORAS_TOGGL.horas).filter(([n])=>!clavesPanel.has(normalizarNombre(n)));
+  if (sinMatch.length){
+    $('#tabla-proyectos').insertAdjacentHTML('beforeend',
+      `<p class="aviso">⚑ Horas de Toggl sin proyecto asociado en el panel (nombralos «Cliente · Proyecto» o cargá un registro con ese nombre): ${sinMatch.map(([n,h])=>`${esc(n)} (${f1.format(h)} h)`).join(' · ')}</p>`);
+  }
+  document.querySelectorAll('[data-insum]').forEach(i=>i.addEventListener('change', e=>{
+    const k = e.target.dataset.insum, v = e.target.value;
+    if (v === '' || +v <= 0) delete S.horasInsumidas[k]; else S.horasInsumidas[k] = +v;
+    guardar(); renderProy();
+  }));
+}
+
+/* ================= render: CFO ================= */
+function renderCFO(){
+  // costos fijos
+  let h = '<table><thead><tr><th>Concepto</th><th class="num">ARS/mes</th><th></th></tr></thead><tbody>';
+  S.costosFijos.forEach((c,i)=>{
+    h += `<tr><td><input data-cn="${i}" value="${esc(c.n)}" style="max-width:none; text-align:left"></td>
+      <td class="num"><input type="number" data-cm="${i}" value="${c.m||0}" min="0" step="1000"></td>
+      <td><button class="accion-tabla" data-cd="${i}">quitar</button></td></tr>`;
+  });
+  const tot = costosFijosTotal();
+  h += `<tr class="total"><td>Total costos fijos</td><td class="num">${fARS.format(tot)}</td><td></td></tr></tbody></table>`;
+  $('#tabla-costos').innerHTML = h;
+  document.querySelectorAll('[data-cn]').forEach(i=>i.addEventListener('change', e=>{ S.costosFijos[+e.target.dataset.cn].n = e.target.value; guardar(); }));
+  document.querySelectorAll('[data-cm]').forEach(i=>i.addEventListener('change', e=>{ S.costosFijos[+e.target.dataset.cm].m = +e.target.value||0; guardar(); renderTodo(); }));
+  document.querySelectorAll('[data-cd]').forEach(b=>b.addEventListener('click', e=>{ S.costosFijos.splice(+e.target.dataset.cd,1); guardar(); renderTodo(); }));
+
+  // equilibrio
+  const tr = tarifaRealActual();
+  const eq = $('#equilibrio');
+  if (tot <= 0){
+    eq.innerHTML = '<p class="nota">Cargá tus costos fijos para calcular el punto de equilibrio: cuántas horas por mes necesitás vender solo para cubrir la estructura, antes de ganar un peso.</p>';
+  } else {
+    const horasEq = tr ? tot/tr.tarifa : null;
+    eq.innerHTML = `
+      <div class="hero-num" style="font-size:32px">${horasEq? f1.format(horasEq)+' h/mes' : '—'}</div>
+      <div class="hero-sub">solo para cubrir ${ars(tot)} de costos fijos, a tu tarifa real actual${tr? ' ('+ars(tr.tarifa)+'/h)':''}</div>
+      <hr class="sep">
+      <p class="nota">Equivale a ${usd(tot/S.tc)} por mes. Todo lo que factures por encima de esto es contribución a tu ingreso.</p>`;
+  }
+
+  // contribución por proyecto
+  const rs = registros();
+  const mapa = new Map();
+  rs.forEach(r=>{
+    const k = claveProy(r);
+    const o = mapa.get(k) || {k, cliente:r.cliente, proyecto:r.proyecto, monto:0};
+    o.monto += r.monto||0; mapa.set(k,o);
+  });
+  const lista = [...mapa.values()].sort((a,b)=>b.monto-a.monto);
+  let ch = '<table><thead><tr><th>Proyecto</th><th class="num">Facturado ARS</th><th class="num">Costo directo ARS</th><th class="num">Contribución</th><th class="num">Margen</th></tr></thead><tbody>';
+  let totF=0, totC=0;
+  lista.forEach(o=>{
+    const cd = +S.costosDirectos[o.k] || 0;
+    const contrib = o.monto - cd, margen = o.monto? contrib/o.monto*100 : 0;
+    totF += o.monto; totC += cd;
+    const clase = margen>=70?'bueno':(margen>=40?'serio':'critico');
+    const icono = margen>=70?'✓':(margen>=40?'≈':'✗');
+    ch += `<tr><td>${esc(o.proyecto)}<span class="sub">${esc(o.cliente)}</span></td>
+      <td class="num">${fARS.format(Math.round(o.monto))}</td>
+      <td class="num"><input type="number" data-dir="${esc(o.k)}" value="${cd||''}" placeholder="0" min="0" step="10000"></td>
+      <td class="num">${fARS.format(Math.round(contrib))}</td>
+      <td class="num"><span class="pill ${clase}">${icono} ${Math.round(margen)} %</span></td></tr>`;
+  });
+  const totContrib = totF-totC;
+  ch += `<tr class="total"><td>Total</td><td class="num">${fARS.format(Math.round(totF))}</td><td class="num">${fARS.format(Math.round(totC))}</td><td class="num">${fARS.format(Math.round(totContrib))}</td><td class="num">${totF?Math.round(totContrib/totF*100):0} %</td></tr></tbody></table>`;
+  $('#tabla-contribucion').innerHTML = ch;
+  document.querySelectorAll('[data-dir]').forEach(i=>i.addEventListener('change', e=>{
+    S.costosDirectos[e.target.dataset.dir] = +e.target.value||0; guardar(); renderCFO();
+  }));
+}
+
+/* ================= eventos ================= */
+function renderTC(){
+  $('#tc').value = S.tc;
+  $('#tc-fuente').textContent = S.tcManualFecha
+    ? `editado a mano el ${S.tcManualFecha.slice(8,10)}/${S.tcManualFecha.slice(5,7)} · BNA ${TC_BNA.fecha.slice(8,10)}/${TC_BNA.fecha.slice(5,7)}: ${fARS.format(TC_BNA.promedio)}`
+    : `BNA ${TC_BNA.fecha.slice(8,10)}/${TC_BNA.fecha.slice(5,7)}: compra ${fARS.format(TC_BNA.compra)} / venta ${fARS.format(TC_BNA.venta)}`;
+}
+function renderRespaldo(){
+  const el = $('#aviso-respaldo');
+  if (!S.ultimoRespaldo){
+    el.innerHTML = '⚠ <b>Nunca descargaste un respaldo.</b> Toda la cartera y los registros viven solo en este navegador: descargá uno ahora y guardalo donde quieras (Drive, mail a vos mismo).';
+  } else {
+    const dias = Math.floor((new Date(HOY) - new Date(S.ultimoRespaldo)) / 86400000);
+    el.innerHTML = dias > 7
+      ? `⚠ Último respaldo hace <b>${dias} días</b> (${S.ultimoRespaldo}). Bajate uno fresco — es un clic.`
+      : `Último respaldo: ${S.ultimoRespaldo} (hace ${dias} día${dias===1?'':'s'}).`;
+  }
+}
+function renderTodo(){ renderTC(); renderCalc(); renderComp(); renderDashboard(); renderCartera(); renderClientes(); renderEstimados(); renderProy(); renderCFO(); renderRespaldo(); }
+
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click', ()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected','false'));
+  document.querySelectorAll('.panel').forEach(x=>x.classList.remove('activo'));
+  t.setAttribute('aria-selected','true');
+  document.getElementById(t.dataset.panel).classList.add('activo');
+}));
+
+$('#horasDia').value = S.horasDia; $('#diasMes').value = S.diasMes; $('#tarifaObj').value = S.tarifaObj;
+$('#tc').addEventListener('change', e=>{
+  const v = Math.max(1,+e.target.value||TC_BNA.promedio);
+  if (v === TC_BNA.promedio) delete S.tcManualFecha; else S.tcManualFecha = HOY;
+  S.tc = v; guardar(); renderTodo();
+});
+$('#metaHoras').value = S.metaHoras; $('#metaTarifa').value = S.metaTarifa;
+$('#metaHoras').addEventListener('change', e=>{ S.metaHoras = Math.max(1, +e.target.value||30); e.target.value = S.metaHoras; guardar(); renderTodo(); });
+$('#metaTarifa').addEventListener('change', e=>{ S.metaTarifa = Math.max(1, +e.target.value||40); e.target.value = S.metaTarifa; guardar(); renderTodo(); });
+$('#btn-nuevo-ejec').addEventListener('click', ()=>nuevoProyecto('Delivery'));
+$('#btn-nuevo-crm').addEventListener('click', ()=>nuevoProyecto('Lead'));
+$('#btn-nuevo-cliente').addEventListener('click', ()=>{
+  const n = 'Nuevo cliente';
+  if (!S.clientes.includes(n)) S.clientes.unshift(n);
+  guardar(); renderClientes();
+});
+$('#btn-respaldo').addEventListener('click', ()=>{
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify({app:'woka-panel', version:2, fecha:HOY, datos:S}, null, 1)], {type:'application/json'}));
+  a.download = 'woka-panel-respaldo-' + HOY + '.json'; a.click(); URL.revokeObjectURL(a.href);
+  S.ultimoRespaldo = HOY; guardar(); renderRespaldo();
+});
+$('#input-respaldo').addEventListener('change', e=>{
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      const j = JSON.parse(r.result);
+      if (j.app !== 'woka-panel' || !j.datos) throw new Error('formato');
+      S = Object.assign({}, porDefecto, j.datos);
+      guardar(); renderTodo();
+      $('#aviso-respaldo').innerHTML = `✓ Respaldo del ${j.fecha} restaurado correctamente.`;
+    } catch(err){ $('#aviso-respaldo').innerHTML = '✗ Ese archivo no es un respaldo válido del panel.'; }
+    e.target.value = '';
+  };
+  r.readAsText(f);
+});
+$('#horasDia').addEventListener('change', e=>{ S.horasDia = Math.min(12, Math.max(0.5, +e.target.value||6)); e.target.value = S.horasDia; guardar(); renderTodo(); });
+$('#diasMes').addEventListener('change', e=>{ S.diasMes = Math.min(26, Math.max(1, +e.target.value||20)); e.target.value = S.diasMes; guardar(); renderTodo(); });
+$('#tarifaObj').addEventListener('change', e=>{ S.tarifaObj = Math.max(50, +e.target.value||50); e.target.value = S.tarifaObj; guardar(); renderTodo(); });
+document.querySelectorAll('#presets .chip').forEach(c=>c.addEventListener('click', ()=>{
+  S.horasDia = +c.dataset.hd; $('#horasDia').value = S.horasDia; guardar(); renderTodo();
+}));
+document.querySelectorAll('.chip.moneda').forEach(c=>c.addEventListener('click', ()=>{
+  S.moneda = c.dataset.m; guardar(); renderComp();
+}));
+
+$('#btn-agregar').addEventListener('click', ()=>{
+  const mes = $('#f-mes').value, cli = $('#f-cliente').value.trim(), pro = $('#f-proyecto').value.trim();
+  const horas = +$('#f-horas').value||0, tarifa = +$('#f-tarifa').value||0, insumidas = +$('#f-insumidas').value||0;
+  let monto = +$('#f-monto').value||0;
+  if (!monto && horas && tarifa) monto = horas*tarifa;
+  const msg = $('#msg-registro');
+  if (!mes || !cli || !pro || (!monto && !horas)){ msg.textContent = 'Completá mes, cliente, proyecto y al menos horas o monto.'; return; }
+  S.extras.push([mes, cli, pro, tarifa, horas, Math.round(monto*100)/100, insumidas]);
+  guardar();
+  msg.textContent = `Registrado: ${cli} · ${pro} — ${etiquetaMes(mes)}.`;
+  ['f-proyecto','f-horas','f-tarifa','f-monto','f-insumidas'].forEach(id=>$('#'+id).value='');
+  renderTodo();
+});
+
+$('#btn-costo').addEventListener('click', ()=>{ S.costosFijos.push({n:'Nuevo costo', m:0}); guardar(); renderCFO(); });
+
+$('#est-anio').addEventListener('change', renderEstimados);
+$('#btn-estimar').addEventListener('click', ()=>{
+  const k = $('#est-proy').value.trim();
+  if (!k) return;
+  if (!S.filasPlanilla.includes(k)) S.filasPlanilla.push(k);
+  guardar();
+  $('#est-proy').value = '';
+  renderEstimados();
+});
+
+$('#btn-csv').addEventListener('click', ()=>{
+  const filas = [['mes','cliente','proyecto','tarifa_ars_hora','horas_vendidas','horas_insumidas','monto_ars','origen']];
+  registros().forEach(r=>filas.push([r.mes, r.cliente, r.proyecto, r.tarifa||0, r.horas||0, r.insumidas||0, r.monto||0, r.nuevo?'panel':(r.editado?'excel-editado':'excel')]));
+  const csv = filas.map(f=>f.map(v=>/[",\n]/.test(String(v))?'"'+String(v).replace(/"/g,'""')+'"':v).join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(["﻿"+csv], {type:'text/csv;charset=utf-8'}));
+  a.download = 'woka-registros.csv'; a.click(); URL.revokeObjectURL(a.href);
+});
+
+renderTodo();
+</script>
