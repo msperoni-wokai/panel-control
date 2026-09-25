@@ -1558,4 +1558,50 @@ $('#btn-csv').addEventListener('click', ()=>{
 });
 
 renderTodo();
+
+// ── Actualización remota de datos ──────────────────────────────────────────
+// El TC se obtiene en vivo de dolarapi (respaldo: bluelytics) y las horas de
+// Toggl del JSON que publica el script diario en GitHub Pages. Los const de
+// arriba quedan como respaldo si no hay red. Nada de esto requiere republicar.
+(async function actualizarDatosRemotos(){
+  let cambio = false;
+  // 1) Tipo de cambio BNA en vivo
+  try {
+    let d = null;
+    try {
+      const r = await fetch('https://dolarapi.com/v1/dolares/oficial', {cache:'no-store'});
+      if (r.ok){ const j = await r.json(); if (j && j.compra && j.venta) d = {compra:j.compra, venta:j.venta, fecha:String(j.fechaActualizacion||'').slice(0,10)}; }
+    } catch(e){}
+    if (!d){
+      const r = await fetch('https://api.bluelytics.com.ar/v2/latest', {cache:'no-store'});
+      if (r.ok){ const j = await r.json(); if (j && j.oficial) d = {compra:j.oficial.value_buy, venta:j.oficial.value_sell, fecha:String(j.last_update||'').slice(0,10)}; }
+    }
+    if (d && d.fecha >= TC_BNA.fecha){
+      TC_BNA.fecha = d.fecha;
+      TC_BNA.compra = Math.round(d.compra);
+      TC_BNA.venta = Math.round(d.venta);
+      TC_BNA.promedio = Math.round((TC_BNA.compra + TC_BNA.venta) / 2);
+      if (!S.tcManualFecha || S.tcManualFecha <= TC_BNA.fecha){ S.tc = TC_BNA.promedio; delete S.tcManualFecha; }
+      cambio = true;
+    }
+  } catch(e){}
+  // 2) Horas y catálogo de Toggl (JSON publicado por el script diario)
+  try {
+    const r = await fetch('https://msperoni-wokai.github.io/panel-control/data/toggl.json', {cache:'no-store'});
+    if (r.ok){
+      const t = await r.json();
+      if (t && t.horas && t.fecha && t.fecha >= HORAS_TOGGL.fecha){
+        HORAS_TOGGL.fecha = t.fecha;
+        HORAS_TOGGL.horas = t.horas;
+        if (t.catalogo && Array.isArray(t.catalogo.clientes) && t.catalogo.proyectos){
+          TOGGL_CATALOGO.clientes = t.catalogo.clientes;
+          TOGGL_CATALOGO.proyectos = t.catalogo.proyectos;
+          TOGGL_CATALOGO.clientes.forEach(c=>{ if (!S.clientes.includes(c)) S.clientes.push(c); });
+        }
+        cambio = true;
+      }
+    }
+  } catch(e){}
+  if (cambio){ guardar(); renderTodo(); }
+})();
 </script>
