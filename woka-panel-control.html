@@ -18,7 +18,7 @@
     --carta:#0F1C4D;            /* navy elevado */
     --tinta:#F2E9D6;            /* paper cálido como tinta */
     --humo:rgba(242,233,214,0.62);
-    --apagado:rgba(242,233,214,0.45);
+    --apagado:rgba(242,233,214,0.55);
     --grid:rgba(242,233,214,0.10);
     --eje:rgba(242,233,214,0.28);
     --borde:rgba(242,233,214,0.14);
@@ -37,11 +37,11 @@
     :root{
       /* inversión paper cálido (sección 05 del kit) */
       --papel:#F2E9D6; --carta:#F8F1E1; --tinta:#0A1438;
-      --humo:rgba(10,20,56,0.68); --apagado:rgba(10,20,56,0.48);
+      --humo:rgba(10,20,56,0.68); --apagado:rgba(10,20,56,0.62);
       --grid:rgba(10,20,56,0.10); --eje:rgba(10,20,56,0.26); --borde:rgba(10,20,56,0.15);
       --acento:#3792FD; --acento-ink:#1D64C8; --acento-suave:rgba(55,146,253,0.12); --acento-texto:#F2E9D6;
       --real:#2A7BE4; --obj:#0FA36B;
-      --bueno:#0E8F5F; --serio:#A66E0A; --critico:#C43C3C;
+      --bueno:#0A7A54; --serio:#8A5A10; --critico:#C43C3C;
       --bueno-bg:rgba(14,143,95,0.12); --serio-bg:rgba(166,110,10,0.13); --critico-bg:rgba(196,60,60,0.12);
       --tip-bg:#0A1438; --tip-tinta:#F2E9D6;
       --sombra:0 1px 2px rgba(10,20,56,.06), 0 4px 14px rgba(10,20,56,.05);
@@ -49,7 +49,7 @@
   }
   :root[data-theme="dark"]{
     --papel:#0A1438; --carta:#0F1C4D; --tinta:#F2E9D6;
-    --humo:rgba(242,233,214,0.62); --apagado:rgba(242,233,214,0.45);
+    --humo:rgba(242,233,214,0.62); --apagado:rgba(242,233,214,0.55);
     --grid:rgba(242,233,214,0.10); --eje:rgba(242,233,214,0.28); --borde:rgba(242,233,214,0.14);
     --acento:#3792FD; --acento-ink:#5BD3F0; --acento-suave:rgba(55,146,253,0.14); --acento-texto:#0A1438;
     --real:#3792FD; --obj:#6EE7B7;
@@ -60,11 +60,11 @@
   }
   :root[data-theme="light"]{
     --papel:#F2E9D6; --carta:#F8F1E1; --tinta:#0A1438;
-    --humo:rgba(10,20,56,0.68); --apagado:rgba(10,20,56,0.48);
+    --humo:rgba(10,20,56,0.68); --apagado:rgba(10,20,56,0.62);
     --grid:rgba(10,20,56,0.10); --eje:rgba(10,20,56,0.26); --borde:rgba(10,20,56,0.15);
     --acento:#3792FD; --acento-ink:#1D64C8; --acento-suave:rgba(55,146,253,0.12); --acento-texto:#F2E9D6;
     --real:#2A7BE4; --obj:#0FA36B;
-    --bueno:#0E8F5F; --serio:#A66E0A; --critico:#C43C3C;
+    --bueno:#0A7A54; --serio:#8A5A10; --critico:#C43C3C;
     --bueno-bg:rgba(14,143,95,0.12); --serio-bg:rgba(166,110,10,0.13); --critico-bg:rgba(196,60,60,0.12);
     --tip-bg:#0A1438; --tip-tinta:#F2E9D6;
     --sombra:0 1px 2px rgba(10,20,56,.06), 0 4px 14px rgba(10,20,56,.05);
@@ -196,7 +196,23 @@
   tr.grupo-etapa td{font-family:var(--f-mono); font-size:9.5px; text-transform:uppercase; letter-spacing:0.16em; font-weight:400; color:var(--acento-ink); background:var(--acento-suave); padding:6px 10px}
   .vencido{color:var(--critico); font-weight:600}
   .grilla-form{display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); align-items:end}
+
+  /* ---------- navegación: contadores, subnav, flotante, avisos cliqueables ---------- */
+  .tbadge{display:inline-block; margin-left:7px; min-width:17px; text-align:center; font-size:9.5px; line-height:17px; border-radius:999px; padding:0 4px; background:var(--acento-suave); color:var(--acento-ink); letter-spacing:0}
+  .tbadge.critico{background:var(--critico-bg); color:var(--critico)}
+  .tbadge.serio{background:var(--serio-bg); color:var(--serio)}
+  .subnav{position:sticky; top:45px; z-index:25; display:flex; gap:8px; flex-wrap:wrap; padding:10px 0; margin-top:4px; background:var(--papel)}
+  .subnav a{font-family:var(--f-mono); font-size:10px; letter-spacing:0.08em; text-transform:uppercase; text-decoration:none; color:var(--humo); border:1px solid var(--borde); border-radius:999px; padding:5px 11px}
+  .subnav a:hover{color:var(--acento-ink); border-color:var(--acento)}
+  .ancla{scroll-margin-top:108px}
+  .fab{position:fixed; right:18px; bottom:18px; z-index:40; appearance:none; cursor:pointer; font-family:var(--f-mono); font-size:11px; letter-spacing:0.08em; padding:10px 14px; border-radius:999px; border:1px solid var(--acento); background:var(--acento); color:var(--acento-texto); box-shadow:0 4px 18px rgba(0,0,0,.3)}
+  .fab[hidden]{display:none}
+  .aviso-fila{display:flex; gap:12px; align-items:flex-start; padding:10px 0; border-bottom:1px solid var(--grid)}
+  .aviso-fila.navegable{cursor:pointer}
+  .aviso-fila.navegable:hover{background:var(--acento-suave)}
+  .aviso-fila .ir{margin-left:auto; flex-shrink:0; font-family:var(--f-mono); font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--acento-ink); white-space:nowrap; padding-top:3px}
   @media (prefers-reduced-motion: no-preference){
+    html{scroll-behavior:smooth}
     .panel.activo{animation:aparecer .18s ease-out}
     @keyframes aparecer{from{opacity:0; transform:translateY(4px)} to{opacity:1; transform:none}}
   }
@@ -378,7 +394,16 @@
     <h2>Proyectos</h2>
     <p class="nota">La cartera en ejecución con sus condiciones (honorarios, horas estimadas, plazos, estado de cobro) se gestiona acá; las horas reales llegan solas desde Toggl (19 h). Control de gestión iniciado el <b>10/07/2026</b>.</p>
 
-    <div class="carta" style="margin-top:16px">
+    <nav class="subnav" aria-label="Secciones de Proyectos">
+      <a href="#sec-dashboard">Dashboard</a>
+      <a href="#sec-detalle">Detalle por proyecto</a>
+      <a href="#sec-planilla">Planilla mensual</a>
+      <a href="#sec-carga">Cargar registro</a>
+      <a href="#sec-registros">Registros</a>
+      <a href="#sec-tarifas">Tarifas</a>
+    </nav>
+
+    <div class="carta ancla" id="sec-dashboard" style="margin-top:16px">
       <p class="ceja">Dashboard</p>
       <h2 style="font-size:16.5px">Estado de la cartera de un vistazo</h2>
       <p class="ceja" style="margin-top:14px">Datos operativos</p>
@@ -390,7 +415,7 @@
       <p class="aviso">Las horas salen de Toggl (sincronización diaria 19 h). La inversión en cortesías y en gestión comercial se valúa a tu tarifa mínima (US$ <span id="dash-tarifa-ref"></span>/h).</p>
     </div>
 
-    <div class="carta" style="margin-top:16px">
+    <div class="carta ancla" id="sec-detalle" style="margin-top:16px">
       <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px">
         <div>
           <p class="ceja">Detalle por Proyecto</p>
@@ -403,7 +428,7 @@
       <p class="aviso">Total proyecto = propuesta (fee fijo), fee × meses de vigencia (mensual) o estimado total cargado a mano (T&amp;M). Cargá el <b>facturado</b> y el <b>cobrado acumulados</b>; las cortesías no cuentan en las cifras financieras.</p>
     </div>
 
-    <div class="carta" style="margin-top:16px">
+    <div class="carta ancla" id="sec-planilla" style="margin-top:16px">
       <div style="display:flex; justify-content:space-between; align-items:end; flex-wrap:wrap; gap:12px">
         <div>
           <p class="ceja">Planilla mensual</p>
@@ -419,7 +444,7 @@
       </div>
     </div>
 
-    <div class="carta" style="margin-top:16px">
+    <div class="carta ancla" id="sec-carga" style="margin-top:16px">
       <p class="ceja">Cargar un registro nuevo</p>
       <div class="grilla-form" id="form-registro">
         <div class="campo"><label for="f-mes">Mes</label><input type="month" id="f-mes"></div>
@@ -434,7 +459,7 @@
       <p class="aviso" id="msg-registro"></p>
     </div>
 
-    <div class="carta" style="margin-top:16px">
+    <div class="carta ancla" id="sec-registros" style="margin-top:16px">
       <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:end; justify-content:space-between">
         <div style="display:flex; gap:12px; flex-wrap:wrap">
           <div class="campo" style="min-width:190px"><label for="filtro-cliente">Filtrar por cliente</label><select id="filtro-cliente"></select></div>
@@ -450,7 +475,7 @@
       <p class="aviso" id="aviso-respaldo"></p>
     </div>
 
-    <div class="carta" style="margin-top:16px">
+    <div class="carta ancla" id="sec-tarifas" style="margin-top:16px">
       <p class="ceja">Tarifas por proyecto · venta vs. efectiva</p>
       <p class="nota">Dos tarifas por proyecto: la de <b>venta</b> (facturado ÷ horas vendidas) y la <b>efectiva</b> (facturado ÷ horas insumidas — las que trabajaste de verdad). Las horas insumidas suman lo medido en <b>Toggl</b> (sincronización diaria 19 h) más lo cargado en registros; si escribís un valor en la columna editable, ese total manual pisa a los automáticos.</p>
       <div class="tabla-envoltura" id="tabla-proyectos"></div>
@@ -524,6 +549,7 @@
 </div>
 
 <div id="tooltip" role="status"></div>
+<button id="fab-top" class="fab" hidden aria-label="Volver arriba">↑ Arriba</button>
 
 <script>
 /* ================= datos del Excel ================= */
@@ -927,19 +953,19 @@ function renderComp(){
   const enCierre = oportunidades.filter(p=>p.etapa==='Propuesta enviada').length;
   const ponderado = oportunidades.reduce((s,p)=>s + (p.fee||0)*((p.prob||0)/100), 0);
   if (cobertura < 70){
-    avisos.push({e:'critico', i:'✗', t:'Modo venta', d:`La facturación cubre el ${Math.round(cobertura)} % de la meta del trimestre (brecha de ${usd(brechaUSD)}/mes). Tenés ${oportunidades.length} oportunidades en el CRM (${enCierre} con propuesta enviada) y un pipeline ponderado de ${usd(ponderado)}${ponderado < brechaUSD*3 ? ' — insuficiente para la brecha: hay que generar más oportunidades' : ''}.`});
+    avisos.push({e:'critico', i:'✗', go:['p-crm'], t:'Modo venta', d:`La facturación cubre el ${Math.round(cobertura)} % de la meta del trimestre (brecha de ${usd(brechaUSD)}/mes). Tenés ${oportunidades.length} oportunidades en el CRM (${enCierre} con propuesta enviada) y un pipeline ponderado de ${usd(ponderado)}${ponderado < brechaUSD*3 ? ' — insuficiente para la brecha: hay que generar más oportunidades' : ''}.`});
   } else if (cobertura < 100){
-    avisos.push({e:'serio', i:'≈', t:'Reforzá la venta', d:`Estás al ${Math.round(cobertura)} % de la meta. Falta ${usd(brechaUSD)}/mes: dedicale al menos un bloque semanal al CRM (${enCierre} propuesta${enCierre===1?'':'s'} por cerrar).`});
+    avisos.push({e:'serio', i:'≈', go:['p-crm'], t:'Reforzá la venta', d:`Estás al ${Math.round(cobertura)} % de la meta. Falta ${usd(brechaUSD)}/mes: dedicale al menos un bloque semanal al CRM (${enCierre} propuesta${enCierre===1?'':'s'} por cerrar).`});
   } else {
-    avisos.push({e:'bueno', i:'✓', t:'Meta cubierta — tiempo para entregar', d:`La facturación supera la meta del trimestre. Usá las horas libres para entregables importantes o para adelantar el próximo escalón hacia las ${f1.format(hObj)} h × US$ ${fARS.format(S.tarifaObj)}.`});
+    avisos.push({e:'bueno', i:'✓', go:['p-proy','sec-detalle'], t:'Meta cubierta — tiempo para entregar', d:`La facturación supera la meta del trimestre. Usá las horas libres para entregables importantes o para adelantar el próximo escalón hacia las ${f1.format(hObj)} h × US$ ${fARS.format(S.tarifaObj)}.`});
   }
   const ult = conDatos[conDatos.length-1];
   if (ult){
     const libres = Math.max(0, hMeta - ult.horas);
-    if (libres > 0) avisos.push({e:'serio', i:'◷', t:`${f1.format(libres)} h de la meta sin vender`, d:`En ${etiquetaMes(ult.mes)} vendiste ${f1.format(ult.horas)} h de las ${f1.format(hMeta)} h de la meta. Ese tiempo es para vender (CRM) o para adelantar entregables clave.`});
+    if (libres > 0) avisos.push({e:'serio', i:'◷', go:['p-crm'], t:`${f1.format(libres)} h de la meta sin vender`, d:`En ${etiquetaMes(ult.mes)} vendiste ${f1.format(ult.horas)} h de las ${f1.format(hMeta)} h de la meta. Ese tiempo es para vender (CRM) o para adelantar entregables clave.`});
     else avisos.push({e:'bueno', i:'✓', t:'Horas de la meta vendidas', d:`En ${etiquetaMes(ult.mes)} cubriste las ${f1.format(hMeta)} h de la meta. Cuidado con sobrevender: reservá agenda para entregar bien.`});
   } else {
-    avisos.push({e:'serio', i:'✎', t:'Aún sin facturación del período de control', d:'El control arrancó el 10/07/2026. Cargá cada factura del mes en «Proyectos» al emitirla — el plan mensual y estos avisos se activan con el primer registro.'});
+    avisos.push({e:'serio', i:'✎', go:['p-proy','sec-carga'], t:'Aún sin facturación del período de control', d:'El control arrancó el 10/07/2026. Cargá cada factura del mes en «Proyectos» al emitirla — el plan mensual y estos avisos se activan con el primer registro.'});
   }
   if (!togglTotal){
     avisos.push({e:'serio', i:'◷', t:'Toggl sin horas todavía', d:'Sin horas trackeadas no hay tarifa efectiva ni utilización. Arrancá el temporizador en cada bloque de trabajo — la sincronización corre todos los días a las 19 h.'});
@@ -949,18 +975,24 @@ function renderComp(){
     avisos.push({e: utilizacion>=50?'bueno':'serio', i:'◔', t:`Utilización: ${Math.round(utilizacion)} % facturable`, d:`${f1.format(togglFacturable)} h en proyectos de clientes vs. ${f1.format(togglComercial)} h de venta y ${f1.format(togglAdmin)} h de administración. Las horas internas son inversión: mirá que conviertan.`});
   }
   const sinValorizar = oportunidades.filter(p=>!p.fee).length;
-  if (sinValorizar) avisos.push({e:'serio', i:'✎', t:`${sinValorizar} oportunidad${sinValorizar===1?'':'es'} sin fee en el CRM`, d:'Sin fee y probabilidad no existe pipeline ponderado y no puedo decirte si la venta alcanza. Valorizá cada oportunidad, aunque sea a grosso modo.'});
+  if (sinValorizar) avisos.push({e:'serio', i:'✎', go:['p-crm'], t:`${sinValorizar} oportunidad${sinValorizar===1?'':'es'} sin fee en el CRM`, d:'Sin fee y probabilidad no existe pipeline ponderado y no puedo decirte si la venta alcanza. Valorizá cada oportunidad, aunque sea a grosso modo.'});
   const activos = S.proyectos.filter(p=>!['Pausado','Cerrado'].includes(p.etapa));
   const vencidos = activos.filter(p=>p.fin && p.fin < HOY).sort((a,b)=>a.fin.localeCompare(b.fin));
   if (vencidos.length){
     const peores = vencidos.slice(0,3).map(p=>p.nombre.split('—')[0].split('·')[0].trim()).join(', ');
-    avisos.push({e: vencidos.length>4?'critico':'serio', i:'⚑', t:`${vencidos.length} plazo${vencidos.length===1?'':'s'} vencido${vencidos.length===1?'':'s'} en la cartera`, d:`Los más atrasados: ${peores}. Actualizá la fecha o cerrá el pendiente hoy.`});
+    avisos.push({e: vencidos.length>4?'critico':'serio', i:'⚑', go:['p-proy','sec-detalle'], t:`${vencidos.length} plazo${vencidos.length===1?'':'s'} vencido${vencidos.length===1?'':'s'} en la cartera`, d:`Los más atrasados: ${peores}. Actualizá la fecha o cerrá el pendiente hoy.`});
   }
   $('#avisos').innerHTML = avisos.map(a=>`
-    <div style="display:flex; gap:12px; align-items:flex-start; padding:10px 0; border-bottom:1px solid var(--grid)">
+    <div class="aviso-fila${a.go?' navegable':''}"${a.go?` data-go="${a.go.join('/')}" role="link" tabindex="0"`:''}>
       <span class="pill ${a.e}" style="flex-shrink:0">${a.i} ${a.t}</span>
       <span style="font-size:13.5px; color:var(--humo)">${a.d}</span>
+      ${a.go?'<span class="ir">ir →</span>':''}
     </div>`).join('') || '<p class="nota">Sin avisos.</p>';
+  document.querySelectorAll('#avisos .navegable').forEach(el=>{
+    const ir = ()=>{ const [t,an] = el.dataset.go.split('/'); activarTab(t, an); };
+    el.addEventListener('click', ir);
+    el.addEventListener('keydown', e=>{ if (e.key==='Enter' || e.key===' '){ e.preventDefault(); ir(); } });
+  });
 
   // chart horas (línea = meta del trimestre)
   grafico('#chart-horas', ag.map(a=>({x:a.mes, y:a.sinDatos?null:a.horas, tip:`<b>${etiquetaMes(a.mes)}</b><br>${f1.format(a.horas)} h vendidas por hora<br>${a.tarifa? 'tarifa prom. '+ars(a.tarifa)+'/h':''}`})), {tipo:'barras', objetivo:hMeta, fmt:v=>f1.format(v)+' h', alto:230});
@@ -1466,14 +1498,56 @@ function renderRespaldo(){
       : `Último respaldo: ${S.ultimoRespaldo} (hace ${dias} día${dias===1?'':'s'}).`;
   }
 }
-function renderTodo(){ renderTC(); renderCalc(); renderComp(); renderDashboard(); renderCartera(); renderClientes(); renderEstimados(); renderProy(); renderCFO(); renderRespaldo(); }
+function renderTodo(){ renderTC(); renderCalc(); renderComp(); renderDashboard(); renderCartera(); renderClientes(); renderEstimados(); renderProy(); renderCFO(); renderRespaldo(); renderTabBadges(); }
 
-document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click', ()=>{
-  document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected','false'));
-  document.querySelectorAll('.panel').forEach(x=>x.classList.remove('activo'));
-  t.setAttribute('aria-selected','true');
-  document.getElementById(t.dataset.panel).classList.add('activo');
-}));
+/* ---- navegación entre pestañas: URL con hash, memoria, teclado y flotante ---- */
+const TABS_ORDEN = [...document.querySelectorAll('.tab')].map(t=>t.dataset.panel);
+function activarTab(id, ancla){
+  if (!TABS_ORDEN.includes(id)) return;
+  document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected', x.dataset.panel===id?'true':'false'));
+  document.querySelectorAll('.panel').forEach(x=>x.classList.toggle('activo', x.id===id));
+  try{ localStorage.setItem('woka-tab', id); }catch(e){}
+  try{ history.replaceState(null,'','#'+id + (ancla?'/'+ancla:'')); }catch(e){}
+  if (ancla && document.getElementById(ancla)) document.getElementById(ancla).scrollIntoView();
+  else window.scrollTo({top:0});
+}
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click', ()=>activarTab(t.dataset.panel)));
+window.addEventListener('hashchange', ()=>{
+  const [id, ancla] = location.hash.slice(1).split('/');
+  if (TABS_ORDEN.includes(id)) activarTab(id, ancla);
+});
+document.addEventListener('keydown', e=>{
+  if (['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName)) return;
+  if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+  const actual = TABS_ORDEN.indexOf(document.querySelector('.tab[aria-selected="true"]')?.dataset.panel);
+  const sig = actual + (e.key === 'ArrowRight' ? 1 : -1);
+  if (sig >= 0 && sig < TABS_ORDEN.length) activarTab(TABS_ORDEN[sig]);
+});
+(function(){ // vista inicial: hash de la URL o la última pestaña usada
+  const [id, ancla] = location.hash.slice(1).split('/');
+  let inicial = TABS_ORDEN.includes(id) ? id : null;
+  if (!inicial){ try{ inicial = localStorage.getItem('woka-tab'); }catch(e){} }
+  if (inicial && TABS_ORDEN.includes(inicial) && inicial !== 'p-calc') activarTab(inicial, ancla);
+})();
+const fab = document.getElementById('fab-top');
+window.addEventListener('scroll', ()=>{ fab.hidden = window.scrollY < 600; }, {passive:true});
+fab.addEventListener('click', ()=>window.scrollTo({top:0}));
+
+function renderTabBadges(){ // contadores de atención en las pestañas
+  const pon = (id, n, clase) => {
+    const t = document.querySelector(`.tab[data-panel="${id}"]`); if (!t) return;
+    t.querySelector('.tbadge')?.remove();
+    if (n > 0) t.insertAdjacentHTML('beforeend', `<span class="tbadge ${clase}">${n}</span>`);
+  };
+  const vencEjec = S.proyectos.filter(p=>ETAPAS_EJECUCION.includes(p.etapa) && p.fin && p.fin < HOY).length;
+  const ops = S.proyectos.filter(p=>['Lead','Propuesta enviada'].includes(p.etapa));
+  const atencionCrm = ops.filter(p=>!p.fee || (p.fin && p.fin < HOY)).length;
+  const hayCritico = !!document.querySelector('#avisos .pill.critico');
+  const avisosN = document.querySelectorAll('#avisos .pill.critico, #avisos .pill.serio').length;
+  pon('p-comp', avisosN, hayCritico ? 'critico' : 'serio');
+  pon('p-proy', vencEjec, 'serio');
+  pon('p-crm', atencionCrm, 'serio');
+}
 
 $('#horasDia').value = S.horasDia; $('#diasMes').value = S.diasMes; $('#tarifaObj').value = S.tarifaObj;
 $('#tc').addEventListener('change', e=>{
