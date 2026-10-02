@@ -211,6 +211,14 @@
   .aviso-fila.navegable{cursor:pointer}
   .aviso-fila.navegable:hover{background:var(--acento-suave)}
   .aviso-fila .ir{margin-left:auto; flex-shrink:0; font-family:var(--f-mono); font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--acento-ink); white-space:nowrap; padding-top:3px}
+  .ind{cursor:pointer}
+  .ind:hover{border-color:var(--acento)}
+  .ritual-item{display:flex; gap:12px; align-items:flex-start; padding:11px 0; border-bottom:1px solid var(--grid)}
+  .ritual-item input[type=checkbox]{width:17px; height:17px; margin-top:2px; accent-color:var(--acento); flex-shrink:0; cursor:pointer}
+  .ritual-item label{font-size:14px; font-weight:300; cursor:pointer}
+  .ritual-item label b{font-weight:500}
+  .ritual-item.hecho label{color:var(--apagado); text-decoration:line-through}
+  .ritual-item .ir{margin-left:auto; flex-shrink:0; font-family:var(--f-mono); font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--acento-ink); white-space:nowrap; padding-top:3px; cursor:pointer}
   @media (prefers-reduced-motion: no-preference){
     html{scroll-behavior:smooth}
     .panel.activo{animation:aparecer .18s ease-out}
@@ -237,7 +245,8 @@
 
 <nav>
   <div class="tabs" role="tablist">
-    <button class="tab" role="tab" aria-selected="true" data-panel="p-calc">Calculador de Tarifa</button>
+    <button class="tab" role="tab" aria-selected="true" data-panel="p-salud">Salud del Negocio</button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="p-calc">Calculador de Tarifa</button>
     <button class="tab" role="tab" aria-selected="false" data-panel="p-comp">Objetivos vs Realidad</button>
     <button class="tab" role="tab" aria-selected="false" data-panel="p-proy">Proyectos</button>
     <button class="tab" role="tab" aria-selected="false" data-panel="p-crm">CRM</button>
@@ -248,7 +257,40 @@
 <div class="wrap">
 
   <!-- ============ TAB 1: CALCULADORA ============ -->
-  <section class="panel activo" id="p-calc" role="tabpanel">
+  <!-- ============ TAB 0: SALUD DEL NEGOCIO ============ -->
+  <section class="panel activo" id="p-salud" role="tabpanel">
+    <p class="ceja">Signos vitales</p>
+    <h2>Salud del Negocio</h2>
+    <p class="nota">La revisión que responde en 30 segundos si la agencia está sana: finanzas, ventas, sustentabilidad y escalabilidad, cada indicador con su umbral declarado. Tocá cualquier indicador para ir a donde se gestiona.</p>
+
+    <div class="carta" id="salud-hero" style="margin-top:16px"></div>
+
+    <p class="ceja" style="margin-top:22px">Finanzas</p>
+    <div class="fila c4" id="salud-fin" style="margin-top:6px"></div>
+    <p class="ceja" style="margin-top:22px">Ventas</p>
+    <div class="fila c3" id="salud-ven" style="margin-top:6px"></div>
+    <p class="ceja" style="margin-top:22px">Sustentabilidad</p>
+    <div class="fila c4" id="salud-sus" style="margin-top:6px"></div>
+    <p class="ceja" style="margin-top:22px">Escalabilidad</p>
+    <div class="fila c3" id="salud-esc" style="margin-top:6px"></div>
+
+    <div class="carta" style="margin-top:22px">
+      <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px">
+        <div>
+          <p class="ceja">Ritual semanal · 10 minutos</p>
+          <h2 style="font-size:16.5px">La revisión que garantiza el control</h2>
+        </div>
+        <span id="ritual-avance" style="font-family:var(--f-mono); font-size:11px; color:var(--humo)"></span>
+      </div>
+      <p class="nota">Cinco pasos, cada lunes. La lista se reinicia sola al empezar la semana; cada paso te lleva a donde se hace.</p>
+      <div id="ritual-lista" style="margin-top:8px"></div>
+    </div>
+
+    <p class="aviso">Umbrales: cada indicador muestra su regla (verde / ámbar / rojo) en la propia tarjeta, calculada sobre el período de control (desde jul-2026), las horas de Toggl y la cartera cargada. El semáforo general se pone rojo con 2 o más indicadores rojos, y ámbar con 1 rojo o 4 ámbar.</p>
+  </section>
+
+  <!-- ============ TAB 1: CALCULADORA ============ -->
+  <section class="panel" id="p-calc" role="tabpanel">
     <p class="ceja">Paso 1 · Definí el objetivo</p>
     <h2>Tu objetivo: horas vendidas × tarifa</h2>
     <p class="nota">El objetivo se arma con volumen y precio: cuántas horas por día lográs vender y a qué tarifa mínima. El ingreso mensual es la consecuencia.</p>
@@ -498,7 +540,7 @@
       <p class="aviso">Regla de probabilidad sugerida: Lead 10 % · Propuesta enviada 40 % · Discovery 70 %. Cuando una oportunidad se gana, cambiá su etapa a Discovery o Delivery y pasa sola a la pestaña Proyectos.</p>
     </div>
 
-    <div class="carta" style="margin-top:16px">
+    <div class="carta ancla" id="sec-clientes" style="margin-top:16px">
       <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px">
         <div>
           <p class="ceja">Padrón de clientes</p>
@@ -1498,7 +1540,130 @@ function renderRespaldo(){
       : `Último respaldo: ${S.ultimoRespaldo} (hace ${dias} día${dias===1?'':'s'}).`;
   }
 }
-function renderTodo(){ renderTC(); renderCalc(); renderComp(); renderDashboard(); renderCartera(); renderClientes(); renderEstimados(); renderProy(); renderCFO(); renderRespaldo(); renderTabBadges(); }
+/* ================= render: salud del negocio ================= */
+let SALUD_ROJOS = 0;
+const RITUAL = [
+  {id:'semaforo', texto:'<b>Leer el semáforo</b> y los indicadores en rojo o ámbar de esta pestaña.'},
+  {id:'registrar', texto:'<b>Registrar la semana</b>: facturado y cobrado por proyecto, y el registro mensual si facturaste.', go:['p-proy','sec-detalle']},
+  {id:'decidir', texto:'<b>Decidir la semana</b> con los avisos: ¿toca vender o entregar?', go:['p-comp']},
+  {id:'crm', texto:'<b>Actualizar el CRM</b>: fees, probabilidades y fechas límite de cada oportunidad.', go:['p-crm']},
+  {id:'respaldo', texto:'<b>Descargar el respaldo</b> de datos (un clic, en la web).', go:['p-proy','sec-registros']},
+];
+function lunesDeLaSemana(){
+  const d = new Date(HOY + 'T12:00:00');
+  d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+  return d.toISOString().slice(0,10);
+}
+function renderSalud(){
+  // ---- bases del período de control ----
+  const [aC,mC] = CONTROL_DESDE.split('-').map(Number), [aH,mH] = HOY.slice(0,7).split('-').map(Number);
+  const mesesCtrl = Math.max(1, (aH-aC)*12 + (mH-mC) + 1);
+  const cf = costosFijosTotal();
+  const cfUSD = cf / S.tc;
+  const metaUSD = S.metaHoras * S.metaTarifa;
+  const ag = agregadosMensuales().filter(a=>a.mes >= CONTROL_DESDE && !a.sinDatos);
+  const factPromUSD = ag.length ? ag.reduce((s,a)=>s+a.total/a.tc,0)/ag.length : 0;
+  const cartera = S.proyectos.filter(p=>(ETAPAS_EJECUCION.includes(p.etapa) || p.etapa==='Cerrado') && p.cobro !== 'Cortesía');
+  const devTotal = cartera.reduce((s,p)=>s+valorContrato(p),0);
+  const facturado = cartera.reduce((s,p)=>s+(p.facturado||0),0);
+  const porCobrar = cartera.reduce((s,p)=>s+Math.max(0,(p.facturado||0)-(p.cobrado||0)),0);
+  const porCliente = {};
+  cartera.forEach(p=>{ const c = p.cliente || '(sin cliente)'; porCliente[c] = (porCliente[c]||0) + valorContrato(p); });
+  const topCli = Object.entries(porCliente).sort((a,b)=>b[1]-a[1])[0];
+  const topPct = devTotal > 0 && topCli ? topCli[1]/devTotal*100 : 0;
+  const ops = S.proyectos.filter(p=>['Lead','Propuesta enviada'].includes(p.etapa));
+  const ponderado = ops.reduce((s,p)=>s+(p.fee||0)*((p.prob||0)/100),0);
+  const sinFee = ops.filter(p=>!p.fee).length;
+  const brechaUSD = Math.max(0, metaUSD + cfUSD - factPromUSD);
+  const ht = horasTogglClasificadas();
+  const utilizacion = ht.total ? ht.facturables/ht.total*100 : 0;
+  const tarifaEfec = ht.facturables > 0 ? devTotal/ht.facturables : 0;
+  const invMesUSD = (ht.internas + ht.cortesia) * S.tarifaObj / mesesCtrl;
+  const invRatio = (factPromUSD || metaUSD) > 0 ? invMesUSD/(factPromUSD || metaUSD)*100 : 0;
+  const recurrente = devTotal > 0 ? cartera.filter(p=>p.modalidad==='Fee mensual').reduce((s,p)=>s+valorContrato(p),0)/devTotal*100 : 0;
+  const objetivoPct = objetivoUSD() > 0 ? factPromUSD/objetivoUSD()*100 : 0;
+  const hsFactMes = ht.facturables/mesesCtrl;
+  const capacidadPct = horasObjetivo() > 0 ? hsFactMes/horasObjetivo()*100 : 0;
+  const respaldoDias = S.ultimoRespaldo ? Math.floor((new Date(HOY)-new Date(S.ultimoRespaldo))/86400000) : null;
+  const nivel = (v, verde, ambar, invertido) => invertido
+    ? (v <= verde ? 'bueno' : (v <= ambar ? 'serio' : 'critico'))
+    : (v >= verde ? 'bueno' : (v >= ambar ? 'serio' : 'critico'));
+
+  // ---- indicadores por plano ----
+  const fin = [
+    {t:'Cobertura de la meta', v:Math.round(factPromUSD/(metaUSD+cfUSD)*100 || 0)+' %', e:nivel(factPromUSD/(metaUSD+cfUSD)*100||0,100,60), d:'facturación prom. vs. meta + costos · verde ≥ 100 · ámbar ≥ 60', go:['p-comp']},
+    {t:'Por cobrar', v:usd(porCobrar), e: facturado>0 ? nivel(porCobrar/facturado*100,25,50,true) : 'bueno', d:'saldo facturado sin cobrar · verde ≤ 25 % de lo facturado', go:['p-proy','sec-detalle']},
+    {t:'Punto de equilibrio', v: cf>0 ? Math.round(factPromUSD/cfUSD*100)/100+'×' : '—', e: cf>0 ? nivel(factPromUSD/cfUSD,2,1) : 'serio', d: cf>0 ? 'facturación vs. costos fijos · verde ≥ 2× · ámbar ≥ 1×' : 'cargá los costos fijos para medirlo', go:['p-cfo']},
+    {t:'Concentración', v:Math.round(topPct)+' %', e:nivel(topPct,40,60,true), d:(topCli?esc(topCli[0])+' · ':'')+'tope sano 40 % del devengado', go:['p-crm','sec-clientes']}
+  ];
+  const ven = [
+    {t:'Cobertura de pipeline', v: brechaUSD>0 ? (Math.round(ponderado/brechaUSD*10)/10)+'×' : '✓', e: brechaUSD>0 ? nivel(ponderado/brechaUSD,3,1) : 'bueno', d:'ponderado vs. brecha mensual · verde ≥ 3× la brecha', go:['p-crm']},
+    {t:'Oportunidades activas', v:ops.length, e:nivel(ops.length,5,2), d:'leads + propuestas vivas · verde ≥ 5', go:['p-crm']},
+    {t:'Sin valorizar', v:sinFee, e:nivel(sinFee,0,2,true), d:'oportunidades sin fee · verde = 0', go:['p-crm']}
+  ];
+  const sus = [
+    {t:'Utilización facturable', v:Math.round(utilizacion)+' %', e:nivel(utilizacion,55,35), d:'horas de clientes vs. total Toggl · verde ≥ 55 %', go:['p-proy','sec-dashboard']},
+    {t:'Tarifa efectiva', v: tarifaEfec ? usd(tarifaEfec)+'/h' : '—', e: tarifaEfec ? nivel(tarifaEfec/S.tarifaObj*100,100,70) : 'serio', d:'devengado ÷ hs facturables · verde ≥ US$ '+fARS.format(S.tarifaObj), go:['p-proy','sec-detalle']},
+    {t:'Inversión no facturable', v:usd(invMesUSD)+'/mes', e:nivel(invRatio,25,60,true), d:'venta + admin + cortesías valuadas · verde ≤ 25 % de la facturación', go:['p-proy','sec-dashboard']},
+    {t:'Respaldo de datos', v: respaldoDias==null ? 'nunca' : 'hace '+respaldoDias+' d', e: respaldoDias==null ? 'critico' : nivel(respaldoDias,7,21,true), d:'continuidad operativa · verde ≤ 7 días', go:['p-proy','sec-registros']}
+  ];
+  const esc_ = [
+    {t:'Ingresos recurrentes', v:Math.round(recurrente)+' %', e:nivel(recurrente,40,15), d:'fee mensual sobre el devengado · verde ≥ 40 %', go:['p-proy','sec-detalle']},
+    {t:'Camino al objetivo', v:Math.round(objetivoPct)+' %', e:nivel(objetivoPct,66,33), d:'facturación vs. las '+f1.format(horasObjetivo())+' h × US$ '+fARS.format(S.tarifaObj)+' del norte', go:['p-calc']},
+    {t:'Techo de capacidad', v:f1.format(hsFactMes)+' h/mes', e:nivel(capacidadPct,85,50,true), d:'hs facturables usadas vs. '+f1.format(horasObjetivo())+' h · rojo ≥ 85 %: delegar o subir precio', go:['p-calc']}
+  ];
+
+  const card = ind => `
+    <div class="carta kpi ind" data-go="${ind.go.join('/')}" role="link" tabindex="0">
+      <p class="ceja">${ind.t}</p>
+      <div class="valor">${ind.v}</div>
+      <div class="detalle" style="margin-top:6px"><span class="pill ${ind.e}">${ind.e==='bueno'?'✓ sano':(ind.e==='serio'?'≈ atención':'✗ crítico')}</span></div>
+      <div class="detalle" style="margin-top:6px">${ind.d}</div>
+    </div>`;
+  $('#salud-fin').innerHTML = fin.map(card).join('');
+  $('#salud-ven').innerHTML = ven.map(card).join('');
+  $('#salud-sus').innerHTML = sus.map(card).join('');
+  $('#salud-esc').innerHTML = esc_.map(card).join('');
+
+  // ---- semáforo general ----
+  const todos = [...fin, ...ven, ...sus, ...esc_];
+  const rojos = todos.filter(i=>i.e==='critico').length, ambares = todos.filter(i=>i.e==='serio').length;
+  SALUD_ROJOS = rojos;
+  const global = rojos >= 2 ? 'critico' : (rojos === 1 || ambares >= 4 ? 'serio' : 'bueno');
+  const titulo = global==='bueno' ? 'El negocio está sano' : (global==='serio' ? 'El negocio pide atención' : 'El negocio está en rojo');
+  $('#salud-hero').innerHTML = `
+    <div style="display:flex; gap:18px; align-items:center; flex-wrap:wrap">
+      <span class="pill ${global}" style="font-size:14px; padding:8px 16px">${global==='bueno'?'✓':(global==='serio'?'≈':'✗')} ${titulo}</span>
+      <span style="font-family:var(--f-mono); font-size:12px; color:var(--humo)">${todos.length} indicadores · ${todos.length-rojos-ambares} sanos · ${ambares} en atención · ${rojos} críticos</span>
+      <span style="font-family:var(--f-mono); font-size:11px; color:var(--apagado); margin-left:auto">al ${HOY.slice(8,10)}/${HOY.slice(5,7)} · período de control: ${mesesCtrl} mes${mesesCtrl===1?'':'es'}</span>
+    </div>`;
+
+  // ---- ritual semanal (se reinicia cada lunes) ----
+  const semana = lunesDeLaSemana();
+  if (!S.ritual || S.ritual.semana !== semana) S.ritual = {semana, hechos:[]};
+  const hechos = S.ritual.hechos;
+  $('#ritual-avance').textContent = `${hechos.length} de ${RITUAL.length} · semana del ${semana.slice(8,10)}/${semana.slice(5,7)}`;
+  $('#ritual-lista').innerHTML = RITUAL.map(r=>`
+    <div class="ritual-item${hechos.includes(r.id)?' hecho':''}">
+      <input type="checkbox" id="rit-${r.id}" data-ritual="${r.id}" ${hechos.includes(r.id)?'checked':''}>
+      <label for="rit-${r.id}">${r.texto}</label>
+      ${r.go?`<span class="ir" data-go="${r.go.join('/')}">ir →</span>`:''}
+    </div>`).join('');
+  document.querySelectorAll('[data-ritual]').forEach(cb=>cb.addEventListener('change', e=>{
+    const id = e.target.dataset.ritual;
+    if (e.target.checked){ if (!S.ritual.hechos.includes(id)) S.ritual.hechos.push(id); }
+    else S.ritual.hechos = S.ritual.hechos.filter(x=>x!==id);
+    guardar(); renderSalud();
+  }));
+  document.querySelectorAll('#p-salud [data-go]').forEach(el=>{
+    if (el.dataset.ritualWired) return; el.dataset.ritualWired = '1';
+    const ir = ev => { ev.stopPropagation(); const [t,an] = el.dataset.go.split('/'); activarTab(t, an); };
+    el.addEventListener('click', ir);
+    if (el.classList.contains('ind')) el.addEventListener('keydown', e=>{ if (e.key==='Enter'||e.key===' '){ e.preventDefault(); ir(e); } });
+  });
+}
+
+function renderTodo(){ renderTC(); renderCalc(); renderComp(); renderDashboard(); renderCartera(); renderClientes(); renderEstimados(); renderProy(); renderCFO(); renderRespaldo(); renderSalud(); renderTabBadges(); }
 
 /* ---- navegación entre pestañas: URL con hash, memoria, teclado y flotante ---- */
 const TABS_ORDEN = [...document.querySelectorAll('.tab')].map(t=>t.dataset.panel);
@@ -1527,7 +1692,7 @@ document.addEventListener('keydown', e=>{
   const [id, ancla] = location.hash.slice(1).split('/');
   let inicial = TABS_ORDEN.includes(id) ? id : null;
   if (!inicial){ try{ inicial = localStorage.getItem('woka-tab'); }catch(e){} }
-  if (inicial && TABS_ORDEN.includes(inicial) && inicial !== 'p-calc') activarTab(inicial, ancla);
+  if (inicial && TABS_ORDEN.includes(inicial) && inicial !== 'p-salud') activarTab(inicial, ancla);
 })();
 const fab = document.getElementById('fab-top');
 window.addEventListener('scroll', ()=>{ fab.hidden = window.scrollY < 600; }, {passive:true});
@@ -1544,6 +1709,7 @@ function renderTabBadges(){ // contadores de atención en las pestañas
   const atencionCrm = ops.filter(p=>!p.fee || (p.fin && p.fin < HOY)).length;
   const hayCritico = !!document.querySelector('#avisos .pill.critico');
   const avisosN = document.querySelectorAll('#avisos .pill.critico, #avisos .pill.serio').length;
+  pon('p-salud', SALUD_ROJOS, 'critico');
   pon('p-comp', avisosN, hayCritico ? 'critico' : 'serio');
   pon('p-proy', vencEjec, 'serio');
   pon('p-crm', atencionCrm, 'serio');
