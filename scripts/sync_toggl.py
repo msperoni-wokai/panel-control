@@ -11,6 +11,8 @@ import datetime
 import json
 import subprocess
 import sys
+import time
+import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -21,16 +23,39 @@ OUT = REPO / "data/toggl.json"
 DESDE = "2026-07-01"
 
 
+# launchd suele disparar al despertar la Mac, antes de que haya red
+# (DNS "nodename nor servname provided"): 5 intentos con espera creciente.
+ESPERAS_SEG = [30, 60, 120, 300]
+REINTENTOS = len(ESPERAS_SEG) + 1
+
+
+def ahora():
+    return datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+
+
 def api(url, payload=None):
     token = TOKEN_FILE.read_text().strip()
     auth = base64.b64encode(f"{token}:api_token".encode()).decode()
     data = json.dumps(payload).encode() if payload is not None else None
-    req = urllib.request.Request(url, data=data, headers={
-        "Authorization": f"Basic {auth}",
-        "Content-Type": "application/json",
-    })
-    with urllib.request.urlopen(req, timeout=30) as r:
-        return json.load(r)
+    ultimo = None
+    for intento in range(1, REINTENTOS + 1):
+        req = urllib.request.Request(url, data=data, headers={
+            "Authorization": f"Basic {auth}",
+            "Content-Type": "application/json",
+        })
+        try:
+            with urllib.request.urlopen(req, timeout=30) as r:
+                return json.load(r)
+        except urllib.error.HTTPError as e:
+            if e.code < 500:  # 4xx (token, permisos): esperar no lo arregla
+                raise
+            ultimo = e
+        except Exception as e:  # red caída, DNS, timeout
+            ultimo = e
+        print(f"{ahora()} AVISO intento {intento}/{REINTENTOS} falló: {ultimo}", file=sys.stderr)
+        if intento < REINTENTOS:
+            time.sleep(ESPERAS_SEG[intento - 1])
+    raise RuntimeError(f"Toggl no respondió tras {REINTENTOS} intentos: {ultimo}")
 
 
 def main():
@@ -67,7 +92,7 @@ def main():
     OUT.parent.mkdir(parents=True, exist_ok=True)
     previo = json.loads(OUT.read_text()) if OUT.exists() else None
     if previo == nuevo:
-        print(f"{hoy}: sin cambios, no se publica.")
+        print(f"{ahora()} {hoy}: sin cambios, no se publica.")
         return 0
 
     OUT.write_text(json.dumps(nuevo, ensure_ascii=False, indent=1) + "\n")
@@ -79,17 +104,17 @@ def main():
     ):
         r = subprocess.run(cmd, cwd=REPO, capture_output=True, text=True)
         if r.returncode != 0:
-            print(f"ERROR en {' '.join(cmd)}: {r.stderr.strip()}", file=sys.stderr)
+            print(f"{ahora()} ERROR en {' '.join(cmd)}: {r.stderr.strip()}", file=sys.stderr)
             return 1
 
     total = round(sum(horas.values()), 1)
-    print(f"{hoy}: {len(horas)} proyectos, {total} h desde {DESDE} — publicado.")
+    print(f"{ahora()} {hoy}: {len(horas)} proyectos, {total} h desde {DESDE} — publicado.")
     return 0
 
 
 if __name__ == "__main__":
     try:
         sys.exit(main())
-    except Exception as e:  # que el log siempre diga qué pasó
-        print(f"ERROR: {e}", file=sys.stderr)
+    except Exception as e:  # que el log siempre diga qué pasó, y cuándo
+        print(f"{ahora()} ERROR: {e}", file=sys.stderr)
         sys.exit(1)
